@@ -7,7 +7,7 @@ image:
   tag: "8.4.4"
 
 vhost:
-  name: grafana-le-portail.happynuts.me
+  name: monitoring.leportail.org
 
 pv:
   host_path: /mnt/k3s-data/grafana
