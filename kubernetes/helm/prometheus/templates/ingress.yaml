@@ -18,7 +18,7 @@ spec:
     - host: {{ .Values.vhost.name }}
       http:
         paths:
-        - path: /
+        - path: /prometheus
           pathType: Prefix
           backend:
             service:

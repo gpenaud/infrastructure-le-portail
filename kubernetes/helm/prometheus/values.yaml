@@ -3,7 +3,7 @@ name: prometheus
 namespace: monitoring
 
 vhost:
-  name: prometheus-le-portail.happynuts.me
+  name: monitoring.leportail.org
 
 kube-state-metrics:
   enabled: true
