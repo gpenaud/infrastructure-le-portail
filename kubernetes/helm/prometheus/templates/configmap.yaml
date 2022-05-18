@@ -48,8 +48,9 @@ data:
           module: [http_2xx]
         static_configs:
           - targets:
-            - http://cagette-application.default.svc.cluster.local
-            - https://www.google.fr
+            - https://cagette-le-portail.happynuts.me
+            - https://www.leportail.org/pages/Accueil#content
+            - https://cagette.leportail.org
         relabel_configs:
           - source_labels: [__address__]
             target_label: __param_target
