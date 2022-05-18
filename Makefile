@@ -1,4 +1,3 @@
-
 # ---------------------------------------------------------------------------- #
 # cluster
 # ---------------------------------------------------------------------------- #
@@ -8,6 +7,40 @@ up:
 
 down:
 	terraform -chdir=terraform destroy -auto-approve
+
+# ---------------------------------------------------------------------------- #
+# cagette
+# ---------------------------------------------------------------------------- #
+
+install-cagette:
+	@[ "${AES_KEY}" ] || echo "AES key should be set in your environment for encryption"
+	@[ "${AES_KEY}" ] && \
+	helm upgrade --install \
+		--set aesKey="${AES_KEY}" \
+		--set app.containers.webapp.image.repository=rg.fr-par.scw.cloud/le-portail/cagette/webapp \
+		--set app.containers.webapp.image.tag=0.2.3 \
+		--set app.containers.mailer.image.repository=rg.fr-par.scw.cloud/le-portail/cagette/mailer \
+		--set app.containers.mailer.image.tag=0.1.2 \
+		--set app.ingress.hosts[0].host=cagette-le-portail.happynuts.me \
+		--set app.ingress.hosts[0].paths[0].path=/ \
+		--set app.ingress.hosts[0].paths[0].pathType=Prefix \
+		--set app.ingress.tls[0].hosts[0]=cagette-le-portail.happynuts.me \
+		--set app.ingress.tls[0].secretName=cagette-le-portail.happynuts.me-tls \
+		--set app.ingress.hosts[1].host=cagette.leportail.org \
+		--set app.ingress.hosts[1].paths[0].path=/ \
+		--set app.ingress.hosts[1].paths[0].pathType=Prefix \
+		--set app.ingress.tls[1].hosts[0]=cagette.leportail.org \
+		--set app.ingress.tls[1].secretName=cagette.leportail.org-tls \
+		cagette ../helm-cagette
+
+uninstall-cagette:
+	helm uninstall cagette
+
+cagette-database-backup:
+	kubectl exec $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysqldump --no-tablespaces -u docker -pdocker db > /home/gpenaud/work/ecolieu/cagette/docker/mysql/dumps/production.sql
+
+cagette-database-restore:
+	kubectl exec -it $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysql -u docker -pdocker db < /home/gpenaud/work/ecolieu/cagette/docker/mysql/dumps/production.sql
 
 # ---------------------------------------------------------------------------- #
 # ingress-nginx for scaleway
@@ -103,32 +136,6 @@ install-external-dns:
 
 uninstall-external-dns:
 	kubectl delete -f kubernetes/external-dns
-
-# ---------------------------------------------------------------------------- #
-# cagette
-# ---------------------------------------------------------------------------- #
-
-install-cagette:
-	helm upgrade --install \
-		--set app.containers.webapp.image.repository=rg.fr-par.scw.cloud/alterconso/gpenaud/cagette \
-		--set app.containers.webapp.image.tag=0.2.0 \
-		--set app.containers.mailer.image.repository=rg.fr-par.scw.cloud/alterconso/gpenaud/cagette-mailer \
-		--set app.containers.mailer.image.tag=0.1.0 \
-		--set app.ingress.hosts[0].host=cagette-le-portail.happynuts.me \
-		--set app.ingress.hosts[0].paths[0].path=/ \
-		--set app.ingress.hosts[0].paths[0].pathType=Prefix \
-		--set app.ingress.tls[0].hosts[0]=cagette-le-portail.happynuts.me \
-		--set app.ingress.tls[0].secretName=cagette-le-portail.happynuts.me-tls \
-		cagette ../helm-cagette
-
-uninstall-cagette:
-	helm uninstall cagette
-
-cagette-database-backup:
-	kubectl exec $(shell kubectl get pods -l app_name=mysql -o name) -- mysqldump --no-tablespaces -u docker -pdocker db > /tmp/development.sql
-
-cagette-database-restore:
-	kubectl exec -it $(shell kubectl get pods -l app_name=mysql -o name) -- mysql -u docker -pdocker db < /home/gpenaud/work/ecolieu/cagette/docker/mysql/dumps/development.sql
 
 # ---------------------------------------------------------------------------- #
 # 																																						 #
