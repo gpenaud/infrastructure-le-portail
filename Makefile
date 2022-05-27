@@ -17,8 +17,9 @@ install-cagette:
 	@[ "${AES_KEY}" ] && \
 	helm upgrade --install \
 		--set aesKey="${AES_KEY}" \
+		--set app.configuration.webapp.vhost=cagette.leportail.org \
 		--set app.containers.webapp.image.repository=rg.fr-par.scw.cloud/le-portail/cagette/webapp \
-		--set app.containers.webapp.image.tag=0.2.3 \
+		--set app.containers.webapp.image.tag=0.2.8 \
 		--set app.containers.mailer.image.repository=rg.fr-par.scw.cloud/le-portail/cagette/mailer \
 		--set app.containers.mailer.image.tag=0.1.2 \
 		--set app.ingress.hosts[0].host=cagette-le-portail.happynuts.me \
@@ -37,10 +38,10 @@ uninstall-cagette:
 	helm uninstall cagette
 
 cagette-database-backup:
-	kubectl exec $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysqldump --no-tablespaces -u docker -pdocker db > /home/gpenaud/work/ecolieu/cagette/docker/mysql/dumps/production.sql
+	kubectl exec $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysqldump --no-tablespaces -u docker -pdocker db > ${SQL_FILE}
 
 cagette-database-restore:
-	kubectl exec -it $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysql -u docker -pdocker db < /home/gpenaud/work/ecolieu/cagette/docker/mysql/dumps/production.sql
+	kubectl exec -it $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysql -u docker -pdocker db < ${SQL_FILE}
 
 # ---------------------------------------------------------------------------- #
 # ingress-nginx for scaleway
@@ -101,7 +102,11 @@ uninstall-prometheus:
 
 ## install grafana
 install-grafana:
-	helm upgrade --install grafana kubernetes/helm/grafana
+	@[ "${AES_KEY}" ] || echo "AES key should be set in your environment for encryption"
+	@[ "${AES_KEY}" ] && \
+	helm upgrade --install \
+		--set aesKey="${AES_KEY}" \
+	grafana kubernetes/helm/grafana
 
 ## uninstall grafana
 uninstall-grafana:
