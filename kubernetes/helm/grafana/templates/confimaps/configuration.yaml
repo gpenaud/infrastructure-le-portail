@@ -6,8 +6,8 @@ metadata:
 data:
   grafana.ini: |
     [security]
-    admin_user = gpenaud
-    admin_password = admin
+    admin_user = {{ .Values.app.grafana.encrypted_admin_user | decryptAES (.Values.aesKey | b64dec)}}
+    admin_password = {{ .Values.app.grafana.encrypted_admin_password | decryptAES (.Values.aesKey | b64dec)}}
     disable_brute_force_login_protection = true
 
     [dashboards]
