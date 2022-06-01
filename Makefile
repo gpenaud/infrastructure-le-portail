@@ -44,6 +44,27 @@ cagette-database-restore:
 	kubectl exec -it $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysql -u docker -pdocker db < ${SQL_FILE}
 
 # ---------------------------------------------------------------------------- #
+# website le portail
+# ---------------------------------------------------------------------------- #
+
+install-website-le-portail:
+	@[ "${AES_KEY}" ] || echo "AES key should be set in your environment for encryption"
+	@[ "${AES_KEY}" ] && \
+	helm upgrade --install \
+		--set aesKey="${AES_KEY}" \
+		--set app.image.tag=0.0.5 \
+		website-le-portail ../helm-website-le-portail
+
+uninstall-website-le-portail:
+	helm uninstall website-le-portail
+
+website-le-portail-database-backup:
+	kubectl exec $(shell kubectl get pods -l app=website-le-portail-mysql -o name) -- mysqldump --no-tablespaces -u docker -pdocker leportaivfgam > database-dumps/leportail/init.sql
+
+website-le-portail-database-restore:
+	kubectl exec -it $(shell kubectl get pods -l app=website-le-portail-mysql -o name) -- mysql -u root -proot < database-dumps/leportail/init.sql
+
+# ---------------------------------------------------------------------------- #
 # ingress-nginx for scaleway
 # ---------------------------------------------------------------------------- #
 
@@ -73,7 +94,7 @@ uninstall-hairpin-protocol:
 install-certmanager:
 	helm upgrade --namespace kube-system --install cert-manager jetstack/cert-manager \
 		--set installCRDs=true \
-		--set ingressShim.extraArgs='{--default-issuer-name=letsencrypt-issuer,--default-issuer-kind=ClusterIssuer}'
+		--set ingressShim.extraArgs='{--default-issuer-name=letsencrypt-staging-clusterissuer,--default-issuer-kind=ClusterIssuer}'
 
 uninstall-certmanager:
 	helm uninstall --namespace kube-system cert-manager
