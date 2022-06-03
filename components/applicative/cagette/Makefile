@@ -41,10 +41,6 @@ database-backup:
 database-restore:
 	@kubectl exec -it $(shell kubectl get pods -l app=cagette-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/alterconso/${SQL_FILE}
 
-## Do nothing at all
-all:
-.PHONY:: all
-
 # ---------------------------------------------------------------------------- #
 # Global configuration
 # ---------------------------------------------------------------------------- #
@@ -63,7 +59,11 @@ COLOR_ERROR       = $(shell tput setaf 1)
 COLOR_COMMENT     = $(shell tput setaf 3)
 COLOR_TITLE_BLOCK = $(shell tput setab 4)
 
-## display this help text
+## Do nothing at all
+all:
+.PHONY:: all
+
+## Display this help text
 help:
 	@printf "\n"
 	@printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"
