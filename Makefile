@@ -65,11 +65,11 @@ PROJECT ?= github.com/gpenaud/infrastructure-le-portail
 
 ## Colors
 BOLD 							= $(shell tput bold)
-UNDERLINE 				= $(shell tput smul)
+UNDERLINE					= $(shell tput smul)
 NOT_UNDERLINE			= $(shell tput rmul)
-COLOR_RESET       = $(shell tput sgr0)
-COLOR_ERROR       = $(shell tput setaf 1)
-COLOR_COMMENT     = $(shell tput setaf 3)
+COLOR_RESET				= $(shell tput sgr0)
+COLOR_ERROR				= $(shell tput setaf 1)
+COLOR_COMMENT			= $(shell tput setaf 3)
 
 COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 # ...and turn them into do-nothing targets
