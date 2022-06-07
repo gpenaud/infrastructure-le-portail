@@ -28,13 +28,19 @@ uninstall-prometheus:
 install-grafana:
 	@[ "${AES_KEY}" ] || echo "AES key should be set in your environment for encryption"
 	@[ "${AES_KEY}" ] && \
-	helm upgrade --install \
-		--set aesKey="${AES_KEY}" \
-	grafana helm/grafana
+	helm repo add bitnami https://charts.bitnami.com/bitnami && \
+	# operator-extras contains encrypted secrets for grafana login
+	helm upgrade --namespace monitoring --install grafana --values grafana/values.yaml bitnami/grafana-operator && \
+	helm upgrade --namespace monitoring --install --set aesKey="${AES_KEY}" grafana-operator-resources ./grafana/operator-resources
 
-## Uninstall grafana
+## Uninstall grafana operator
 uninstall-grafana:
-	helm uninstall grafana
+	helm uninstall --namespace monitoring grafana
+	helm uninstall --namespace monitoring grafana-operator-resources
+
+## Logs grafana operator
+logs-grafana:
+	kubectl logs --namespace monitoring -f -l app.kubernetes.io/name=grafana-operator
 
 # ---------------------------------------------------------------------------- #
 # loki
