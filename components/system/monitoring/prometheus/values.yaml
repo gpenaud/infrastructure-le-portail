@@ -1,0 +1,46 @@
+
+prometheus:
+  enabled: true
+  ingress:
+    enabled: true
+    hostname: monitoring.prometheus.leportail.org
+    path: /
+    pathType: Prefix
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-production-clusterissuer"
+      cert-manager.io/issue-temporary-certificate: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
+    tls: true
+  alertmanagers:
+    - name: prometheus-kube-prometheus-alertmanager
+      namespace: monitoring
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+      prometheus: prometheus-kube-prometheus-prometheus
+
+blackboxExporter:
+  enabled: true
+
+alertmanager:
+  enabled: true
+  ingress:
+    enabled: true
+    hostname: monitoring.alertmanager.leportail.org
+    path: /
+    pathType: Prefix
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-production-clusterissuer"
+      cert-manager.io/issue-temporary-certificate: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
+    tls: true
+  configSelector:
+    matchExpressions:
+      - key: alertmanagerConfig
+        operator: In
+        values:
+          - le-portail
