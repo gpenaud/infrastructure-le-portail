@@ -1,0 +1,14 @@
+apiVersion: v2
+name: ingress-nginx
+description: Ingress nginx for k8s clusters
+type: system
+version: 0.1.0
+appVersion: "0.1.0"
+
+keywords:
+  - ingress
+  - nginx
+
+maintainers:
+  - email: guillaume.penaud@gmail.com
+    name: Guillaume Penaud

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: hairpin-protocol
+description: Hairpin protocol for k8s clusters
+type: system
+version: 0.1.0
+appVersion: "0.1.0"
+
+keywords:
+  - hairpin
+  - proxy
+
+maintainers:
+  - email: guillaume.penaud@gmail.com
+    name: Guillaume Penaud
