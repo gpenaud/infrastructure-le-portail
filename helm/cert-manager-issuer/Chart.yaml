@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cert-manager-issuer
 description: Issuer for cert-manager
-type: system
+type: application
 version: 0.1.0
 appVersion: "0.1.0"
 
