@@ -3,14 +3,14 @@ apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDataSource
 metadata:
   name: grafana-datasources
-  namespace: monitoring
+  namespace: {{ .Release.Namespace }}
 spec:
   name: datasources.yaml
   datasources:
     - name: Prometheus
       type: prometheus
       access: proxy
-      url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+      url: http://prometheus-kube-prometheus-prometheus.{{ .Release.Namespace }}.svc.cluster.local:9090
       isDefault: true
       version: 1
       editable: true

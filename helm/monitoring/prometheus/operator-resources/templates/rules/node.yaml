@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: prometheus-node-rules
-  namespace: monitoring
+  namespace: {{ .Release.Namespace }}
   labels:
     role: alert-rules
     prometheus: prometheus-kube-prometheus-prometheus
