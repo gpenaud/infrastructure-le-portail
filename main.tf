@@ -3,10 +3,6 @@ terraform {
     scaleway = {
       source = "scaleway/scaleway"
     }
-    sops = {
-      source = "carlpett/sops"
-      version = "~> 0.5"
-    }
   }
 }
 
@@ -91,7 +87,23 @@ resource "helm_release" "nginx_ingress" {
 resource "local_file" "kubeconfig" {
   depends_on = [scaleway_k8s_pool.default]
   content    = scaleway_k8s_cluster.alterconso.kubeconfig[0].config_file
-  filename   = "${path.module}/../kubeconfig"
+  filename   = "${path.module}/kubeconfig"
+}
+
+module layer_system {
+  source = "./layers/system"
+
+  force_helm_upgrade                       = var.force_helm_upgrade
+  domain                                   = var.domain
+  deploy_monitoring_stack                  = var.deploy_monitoring_stack
+  certificate_issuer                       = var.certificate_issuer
+  grafana_ingress_hostname                 = var.grafana_ingress_hostname
+  prometheus_server_ingress_hostname       = var.prometheus_server_ingress_hostname
+  prometheus_alertmanager_ingress_hostname = var.prometheus_alertmanager_ingress_hostname
+}
+
+module layer_application {
+  source = "./layers/application"
 }
 
 output "cluster_url" {
