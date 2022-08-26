@@ -11,6 +11,12 @@ variable project_id {
   // default     = "341d39c7-1613-45d9-8b9f-e3c001c46cb0"
 }
 
+variable force_helm_upgrade {
+  type        = bool
+  description = "wether or not force helm release to be upgraded"
+  default     = "false"
+}
+
 variable domain {
   type        = string
   description = "the dns domain used by ingress hostnames"
@@ -20,7 +26,7 @@ variable domain {
 variable deploy_monitoring_stack {
   type        = bool
   description = "Determine wether or not we should deploy the monitoring stack (prometheus & grafana & loki)"
-  default     = "false"
+  default     = "true"
 }
 
 variable certificate_issuer {
