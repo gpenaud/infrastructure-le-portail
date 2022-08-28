@@ -53,3 +53,7 @@ variable prometheus_alertmanager_ingress_hostname {
   type        = string
   description = "ingress hostname used by prometheus alertmanager"
 }
+
+#
+# alterconso specific variables
+# -----------------------------
