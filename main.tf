@@ -104,6 +104,15 @@ module layer_system {
 
 module layer_application {
   source = "./layers/application"
+
+  webapp_vhost                   = var.webapp_vhost
+  webapp_image_repository        = var.webapp_image_repository
+  webapp_image_tag               = var.webapp_image_tag
+  webapp_ingress_host            = var.webapp_ingress_host
+  webapp_ingress_tls_host        = var.webapp_ingress_tls_host
+  webapp_ingress_tls_secret_name = var.webapp_ingress_tls_secret_name
+  mailer_image_repository        = var.mailer_image_repository
+  mailer_image_tag               = var.mailer_image_tag
 }
 
 output "cluster_url" {

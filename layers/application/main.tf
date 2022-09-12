@@ -7,7 +7,6 @@ terraform {
   }
 }
 
-
 data "sops_file" "alterconso-webapp-secrets" {
   source_file = "${path.root}/helm/alterconso/sops-secrets.yaml"
 }
@@ -19,32 +18,32 @@ resource "helm_release" "alterconso" {
 
   set {
     name  = "app.configuration.webapp.vhost"
-    value = "alterconso.leportail.org"
+    value = var.webapp_vhost
   }
 
   set {
     name  = "app.containers.webapp.image.repository"
-    value = "rg.fr-par.scw.cloud/le-portail/alterconso/webapp"
+    value = var.webapp_image_repository
   }
 
   set {
     name  = "app.configuration.webapp.image.tag"
-    value = "0.2.8"
+    value = var.webapp_image_tag
   }
 
   set {
     name  = "app.containers.webapp.image.repository"
-    value = "rg.fr-par.scw.cloud/le-portail/alterconso/mailer"
+    value = var.mailer_image_repository
   }
 
   set {
     name  = "app.containers.mailer.image.tag"
-    value = "0.1.2"
+    value = var.mailer_image_tag
   }
 
   set {
     name  = "app.ingress.hosts[1].host"
-    value = "alterconso.leportail.org"
+    value = var.webapp_ingress_host
   }
 
   set {
@@ -59,12 +58,12 @@ resource "helm_release" "alterconso" {
 
   set {
     name  = "app.ingress.tls[1].hosts[0]"
-    value = "alterconso.leportail.org"
+    value = var.webapp_ingress_tls_host
   }
 
   set {
     name  = "app.ingress.tls[1].secretName"
-    value = "alterconso.leportail.org-tls"
+    value = var.webapp_ingress_tls_secret_name
   }
 
   set {
