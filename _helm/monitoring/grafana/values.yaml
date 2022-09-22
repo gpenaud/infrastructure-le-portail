@@ -1,0 +1,21 @@
+grafana:
+  skipCreateAdminAccount: true
+  envFrom:
+    - secretRef:
+        name: grafana-admin-credentials
+  ingress:
+    enabled: true
+    hostname: monitoring.leportail.org
+    path: /
+    pathType: Prefix
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-production-clusterissuer"
+      cert-manager.io/issue-temporary-certificate: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
+    tls: true
+    secretName: monitoring.leportail.org-tls
+  dashboardLabelSelector:
+    - matchExpressions:
+        - { key: application, operator: In, values: [ grafana ] }

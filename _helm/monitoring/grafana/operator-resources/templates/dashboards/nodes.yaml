@@ -1,0 +1,14 @@
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-nodes-dashboard
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: grafana
+spec:
+  customFolderName: le-portail
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+  json: >
+    {{ .Files.Get "files/nodes.json" | nindent 4 }}

@@ -1,0 +1,96 @@
+nameOverride: ""
+fullnameOverride: ""
+
+app:
+  # -------------------------------------------------------------------------- #
+  #                           application configuration                        #
+  # -------------------------------------------------------------------------- #
+  configuration:
+    webapp:
+      vhost: alterconso.leportail.org
+      sql_log_enabled: false
+      debug_enabled: true
+      mailer_host: localhost
+      mailer_port: 5000
+      mysql_enabled: true
+      mysql_user: docker
+      mysql_password: docker
+      mysql_host: localhost
+      mysql_port: 3306
+      mysql_database: db
+
+  # -------------------------------------------------------------------------- #
+  #                           containers configuration                         #
+  # -------------------------------------------------------------------------- #
+  containers:
+    webapp:
+      replicaCount: 1
+      image:
+        repository: alterconso-webapp
+        pullPolicy: IfNotPresent
+        tag: "1.0.0"
+      imagePullSecrets: []
+      ports:
+        - containerPort: 80
+          protocol: TCP
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+    # ------------------------------------------------------------------------ #
+    #                                   Mailer                                 #
+    # ------------------------------------------------------------------------ #
+    mailer:
+      replicaCount: 1
+      image:
+        repository: alterconso-mailer
+        pullPolicy: IfNotPresent
+        tag: "1.0.0"
+      imagePullSecrets: []
+      ports:
+        - name: mailer
+          containerPort: 5000
+          protocol: TCP
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 150m
+          memory: 64Mi
+  serviceAccount:
+    create: true
+    name: ""
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging-clusterissuer"
+      cert-manager.io/issue-temporary-certificate: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
+    hosts:
+      - host: alterconso.leportail.org
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+        - alterconso.leportail.org
+        secretName: alterconso.leportail.org-tls
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 90
+    targetMemoryUtilizationPercentage: 90
+
+mysql:
+  enabled: true

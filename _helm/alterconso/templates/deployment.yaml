@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "alterconso.fullname" . }}
+  labels:
+    {{- include "alterconso.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.app.autoscaling.enabled }}
+  replicas: {{ .Values.app.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "alterconso.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.app.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "alterconso.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "alterconso.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.app.podSecurityContext | nindent 8 }}
+      initContainers:
+        {{- toYaml .Values.app.initContainers | nindent 8 }}
+      containers:
+        {{- range $name, $container := .Values.app.containers }}
+        - name: {{ $name }}
+          image: "{{ $container.image.repository }}:{{ $container.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $container.image.pullPolicy }}
+          ports:
+            {{- toYaml $container.ports | nindent 10 }}
+          volumeMounts:
+            - name: {{ $.Release.Name }}-webapp-volume
+              mountPath: "/var/www/alterconso/config.xml"
+              subPath: config.xml
+              readOnly: true
+            - name: {{ $.Release.Name }}-webapp-volume
+              mountPath: "/etc/apache2/sites-available/{{ $.Values.app.configuration.webapp.vhost }}.conf"
+              subPath: "vhost.conf"
+              readOnly: true
+            - name: {{ $.Release.Name }}-webapp-volume
+              mountPath: "/etc/apache2/sites-enabled/{{ $.Values.app.configuration.webapp.vhost }}.conf"
+              subPath: "vhost.conf"
+              readOnly: true
+          securityContext:
+            {{- toYaml $container.securityContext | nindent 12 }}
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml $container.resources | nindent 12 }}
+          env:
+            {{- range $key, $value := $container.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}
+                  key: smtp_user
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}
+                  key: smtp_password
+         {{- end }}
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+      - name: {{ .Release.Name }}-webapp-volume
+        configMap:
+          name: {{ .Release.Name }}-webapp
+          items:
+          - key: config.xml
+            path: config.xml
+          - key: vhost.conf
+            path: vhost.conf
+      {{- with .Values.app.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.app.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.app.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

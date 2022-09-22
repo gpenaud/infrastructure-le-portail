@@ -1,0 +1,7 @@
+---
+external_dns_image: k8s.gcr.io/external-dns/external-dns:v0.8.0
+external_dns_source: service
+external_dns_domain: example.com
+
+external_dns_access_key: ""
+external_dns_secret_key: ""

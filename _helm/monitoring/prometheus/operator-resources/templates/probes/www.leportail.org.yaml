@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: prometheus-blackbox-probe-for-www-leportail-org
+  namespace: {{ .Release.Namespace }}
+spec:
+  interval: 30s
+  module: http_2xx
+  prober:
+    url: prometheus-kube-prometheus-blackbox-exporter.{{ .Release.Namespace }}.svc.cluster.local:19115
+  targets:
+    staticConfig:
+      static:
+      - https://www.leportail.org

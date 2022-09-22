@@ -1,0 +1,14 @@
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-blackbox-dashboard
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: grafana
+spec:
+  customFolderName: le-portail
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+  json: >
+    {{ .Files.Get "files/blackbox.json" | nindent 4 }}

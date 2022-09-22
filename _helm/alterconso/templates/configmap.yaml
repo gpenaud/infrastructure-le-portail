@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-webapp
+  namespace: {{ .Values.namespace }}
+data:
+  config.xml: |
+    <config
+    	lang="fr"
+    	langs="fr;de;en"
+    	langnames="Français;Deutsch;English"
+
+      host="{{ .Values.app.configuration.webapp.vhost }}"
+      name = "Alterconso - Le Portail"
+      default_email = "alterconso@leportail.org"
+      webmaster_email = "mon_email@mon_domaine.fr"
+
+      database="mysql://{{ .Values.app.configuration.webapp.mysql_user }}:{{ .Values.app.configuration.webapp.mysql_password }}@{{ $.Release.Name }}-mysql:{{ .Values.app.configuration.webapp.mysql_port }}/{{ .Values.app.configuration.webapp.mysql_database }}"
+
+      {{- if .Values.app.configuration.webapp.sql_log_enabled }}
+      sqllog="1"
+      {{ else }}
+      sqllog="0"
+      {{ end }}
+      {{- if .Values.app.configuration.webapp.debug_enabled }}
+      debug="1"
+      {{ else }}
+      debug="0"
+      {{ end }}
+    	cache="0"
+    	maintain="0"
+    	cachetpl="0"
+      key="{{ .Values.app.configuration.webapp.password_salt_cache_key | default "localdevkey" }}"
+      alterconso_api="{{ .Values.app.configuration.webapp.api_url | default "http://localhost:3010" }}"
+    	mailer_host="{{ .Values.app.configuration.webapp.mailer_host | default "127.0.0.1" }}"
+    	mailer_port="{{ .Values.app.configuration.webapp.mailer_port | default "5000" }}"
+    />
+
+  vhost.conf: |
+    <VirtualHost *:80>
+      ServerName  {{ .Values.app.configuration.webapp.vhost }}
+      ServerAdmin  guillaume.penaud@gmail.com
+
+      DocumentRoot /var/www/alterconso/www
+
+      <Directory /var/www/alterconso/www>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+        EnableSendfile Off
+      </Directory>
+    </VirtualHost>

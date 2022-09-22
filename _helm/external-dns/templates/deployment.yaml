@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: external-dns
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      serviceAccountName: external-dns
+      containers:
+      - name: external-dns
+        image: {{ .Values.external_dns_image }}
+        args:
+        - --source={{ .Values.external_dns_source }} # ingress is also possible
+        - --domain-filter={{ .Values.external_dns_domain }} # (optional) limit to only example.com domains; change to match the zone created above.
+        - --provider=scaleway
+        env:
+        - name: SCW_ACCESS_KEY
+          value: "{{ .Values.external_dns_access_key }}"
+        - name: SCW_SECRET_KEY
+          value: "{{ .Values.external_dns_secret_key }}"

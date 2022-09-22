@@ -1,0 +1,25 @@
+apiVersion: v2
+name: alterconso
+description: The Alterconso Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+
+sources:
+  - https://github.com/gpenaud/alterconso-webapp.git
+  - https://github.com/gpenaud/helm-alterconso.git
+
+dependencies:
+  - condition: mysql.enabled
+    name: mysql
+    version: 0.1.0
+
+keywords:
+  - application
+  - web
+  - http
+  - amap
+
+maintainers:
+  - email: guillaume.penaud@gmail.com
+    name: Guillaume Penaud

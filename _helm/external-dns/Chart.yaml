@@ -1,0 +1,13 @@
+apiVersion: v2
+name: external-dns
+description: Automated DNS records for k8s ingresses
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+
+keywords:
+  - dns
+
+maintainers:
+  - email: guillaume.penaud@gmail.com
+    name: Guillaume Penaud

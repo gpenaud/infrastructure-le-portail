@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ .Release.Name }}-{{ .Chart.Name }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: mysql
+              protocol: TCP
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "db"
+            - name: MYSQL_USER
+              value: "docker"
+            - name: MYSQL_PASSWORD
+              value: "docker"
+          volumeMounts:
+            - name: {{ .Release.Name }}-{{ .Chart.Name }}-data
+              mountPath: "/var/lib/mysql"
+            - name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+              mountPath: "/etc/mysql/conf.d"
+              readOnly: true
+      volumes:
+        - name: {{ .Release.Name }}-{{ .Chart.Name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}
+        - name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+          configMap:
+            name: {{ .Release.Name }}-{{ .Chart.Name }}
+            items:
+            - key: "my.cnf"
+              path: "my.cnf"
