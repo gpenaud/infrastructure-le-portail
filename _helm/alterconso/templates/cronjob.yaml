@@ -1,47 +1,19 @@
-# apiVersion: batch/v1
-# kind: CronJob
-# metadata:
-#   name: hello
-# spec:
-#   schedule: "0 9 * * MON"
-#   jobTemplate:
-#     spec:
-#       template:
-#         spec:
-#           containers:
-#           - name: hello
-#             image: alterconso-mailer:1.0.0
-#             imagePullPolicy: IfNotPresent
-#             command:
-#             - remind
-#             - --subject "Les commandes sont ouvertes"
-#             - --group-name "Alterconso du Val de Brenne"
-#             - --template-name "opening_order"
-#             - --template-address "alterconso.leportail.org"
-#             - --sender-mail "alterconso@leportail.org"
-#           restartPolicy: OnFailure
-#
-# ---
-#
-# apiVersion: batch/v1
-# kind: CronJob
-# metadata:
-#   name: hello
-# spec:
-#   schedule: "0 9 * * THU"
-#   jobTemplate:
-#     spec:
-#       template:
-#         spec:
-#           containers:
-#           - name: hello
-#             image: alterconso-mailer:1.0.0
-#             imagePullPolicy: IfNotPresent
-#             command:
-#             - remind
-#             - --subject "Les commandes vont bientôt fermer"
-#             - --group-name "Alterconso du Val de Brenne"
-#             - --template-name "closing_order"
-#             - --template-address "alterconso.leportail.org"
-#             - --sender-mail "alterconso@leportail.org"
-#           restartPolicy: OnFailure
+{{- range $name, $cronjob := .Values.app.cronjobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $name }}
+spec:
+  schedule: "{{ $cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ $name }}
+            image: {{ $cronjob.image_repository }}:{{ $cronjob.image_tag }}
+            imagePullPolicy: IfNotPresent
+            command: {{ $cronjob.command_arguments }}
+          restartPolicy: OnFailure
+{{- end }}

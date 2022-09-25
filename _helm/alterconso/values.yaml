@@ -2,9 +2,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 app:
-  # -------------------------------------------------------------------------- #
-  #                           application configuration                        #
-  # -------------------------------------------------------------------------- #
+  # application configuration #
+  # --------------------------#
   configuration:
     webapp:
       vhost: alterconso.leportail.org
@@ -19,9 +18,34 @@ app:
       mysql_port: 3306
       mysql_database: db
 
-  # -------------------------------------------------------------------------- #
-  #                           containers configuration                         #
-  # -------------------------------------------------------------------------- #
+  # cronjobs configuration #
+  # -----------------------#
+  cronjobs:
+    opening-order:
+      schedule: 0 9 * * MON
+      image_repository: alterconso-mailer
+      image_tag: 1.0.0
+      command_argments:
+        - remind
+        - --subject "Les commandes sont ouvertes"
+        - --group-name "Alterconso du Val de Brenne"
+        - --template-name "opening_order"
+        - --template-address "alterconso.leportail.org"
+        - --sender-mail "alterconso@leportail.org"
+    closing-order:
+      schedule: 0 9 * * THU
+      image_repository: alterconso-mailer
+      image_tag: 1.0.0
+      command_argments:
+        - remind
+        - --subject "Les commandes vont bientôt fermer"
+        - --group-name "Alterconso du Val de Brenne"
+        - --template-name "closing_order"
+        - --template-address "alterconso.leportail.org"
+        - --sender-mail "alterconso@leportail.org"
+
+  # containers configuration #
+  # -------------------------#
   containers:
     webapp:
       replicaCount: 1
@@ -40,9 +64,9 @@ app:
         requests:
           cpu: 250m
           memory: 128Mi
-    # ------------------------------------------------------------------------ #
-    #                                   Mailer                                 #
-    # ------------------------------------------------------------------------ #
+
+    # Mailer configuration #
+    # ---------------------#
     mailer:
       replicaCount: 1
       image:
