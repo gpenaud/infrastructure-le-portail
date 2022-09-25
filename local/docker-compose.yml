@@ -16,17 +16,17 @@ services:
   webapp:
     image: gpenaud/alterconso-webapp
     build:
-      context: ./../webapp
+      context: ./../../webapp
     restart: always
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ./../webapp/configuration/apache2/apache2.conf:/etc/apache2/apache2.conf
-      - ./../webapp/configuration/apache2/certificates:/etc/apache2/certificates
-      - ./../webapp/configuration/apache2/vhosts/https.conf:/etc/apache2/sites-available/alterconso.localhost.conf
-      - ./../webapp/configuration/apache2/vhosts/https.conf:/etc/apache2/sites-enabled/alterconso.localhost.conf
-      - ./../webapp/configuration/app/config.xml:/var/www/alterconso/config.xml
+      - ./../../webapp/configuration/apache2/apache2.conf:/etc/apache2/apache2.conf
+      - ./../../webapp/configuration/apache2/certificates:/etc/apache2/certificates
+      - ./../../webapp/configuration/apache2/vhosts/https.conf:/etc/apache2/sites-available/alterconso.localhost.conf
+      - ./../../webapp/configuration/apache2/vhosts/https.conf:/etc/apache2/sites-enabled/alterconso.localhost.conf
+      - ./../../webapp/configuration/app/config.xml:/var/www/alterconso/config.xml
     depends_on:
       - mysql
     networks:
@@ -37,7 +37,7 @@ services:
     # image: alterconso/mailer:latest
     image: alterconso/mailer-production:latest
     build:
-      context: ./../microservices/mailer
+      context: ./../../microservices/mailer
     ports:
       - 5000:5000
     command: serve --config-file config.yaml
@@ -60,7 +60,7 @@ services:
       - 3306:3306
     volumes:
       - database:/var/lib/mysql
-      - ./../webapp/configuration/mysql/dumps/:/root/dumps
-      - ./../webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./../../webapp/configuration/mysql/dumps/:/root/dumps
+      - ./../../webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
       - alterconso

@@ -32,27 +32,14 @@ cache-clear:
 
 # ---------------------------------------------------------------------------- #
 
-SQL_FILE := from_production.sql
-
-## Backups database in its development version
-database-backup:
-	docker compose exec mysql sh -c "mysqldump --hex-blob --no-tablespaces -u docker -pdocker db > ${SQL_FILE}"
-	docker cp $(shell docker compose ps -q mysql):/${SQL_FILE} configuration/mysql/dumps/${SQL_FILE}
-
-database-backup-images-from-development:
-	docker compose exec mysql sh -c "mysqldump --hex-blob --no-tablespaces -u docker -pdocker db File > product-images-only.sql"
-	docker cp $(shell docker compose ps -q mysql):/product-images-only.sql database-dumps/product-images-only.sql
-
-## Backups database from its development version
-database-backup-from-production:
-	cd ../infrastructure_v1/components/applicative/alterconso
-	make database-backup SQL_FILE=backup.sql
-	mv database-dumps/alterconso/backup.sql ../../../../webapp/configuration/mysql/dumps/from_production.sql
+SQL_BACKUP_DIRECTORY := backup-24-09-2022
 
 ## Backups database from its development version
 database-restore:
-	docker cp ../webapp/configuration/mysql/dumps/${SQL_FILE} $(shell docker compose ps -q mysql):/${SQL_FILE}
-	docker compose exec mysql sh -c "mysql -u docker -pdocker --binary-mode --max_allowed_packet=64M db  < ${SQL_FILE}"
+	docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/files.sql $(shell docker compose ps -q mysql):/files.sql
+	docker compose exec mysql sh -c "mysql -u docker -pdocker db  < files.sql"
+	docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/main.sql $(shell docker compose ps -q mysql):/main.sql
+	docker compose exec mysql sh -c "mysql -u docker -pdocker db  < main.sql"
 
 # ---------------------------------------------------------------------------- #
 
