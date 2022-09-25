@@ -17,14 +17,34 @@ resource "scaleway_instance_security_group" "mail" {
   inbound_default_policy  = "drop"
   inbound_rule {
     action = "accept"
+    port   = 25
+  }
+
+  inbound_rule {
+    action = "accept"
     port   = 465
+  }
+
+  inbound_rule {
+    action = "accept"
+    port   = 587
   }
 
   # @TODO test if outbound is necessary
   outbound_default_policy = "drop"
   outbound_rule {
     action = "accept"
+    port   = 25
+  }
+
+  outbound_rule {
+    action = "accept"
     port   = 465
+  }
+
+  outbound_rule {
+    action = "accept"
+    port   = 587
   }
 }
 

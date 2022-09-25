@@ -14,20 +14,20 @@ log-mailer:
 
 ## Dumps a database backup in ./database-dumps/alterconso/${SQL_FILE} directory
 database-backup:
-	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysqldump --no-tablespaces -u docker -pdocker db --ignore-table={db.Session,db.File} > database-dumps/main.sql
-	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysqldump --hex-blob --max_allowed_packet=1G --no-tablespaces -u docker -pdocker db File > dump.sql > database-dumps/files.sql
+	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysqldump -u root -proot --routines --triggers --events --hex-blob --skip-extended-insert --complete-insert --single-transaction --ignore-table={db.Session,db.File} --databases db --result-file=main.sql
+	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} cp --retries=10 default/$(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name | sed 's#.*/##'):main.sql main.sql
+	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysqldump -u root -proot --routines --triggers --events --hex-blob --skip-extended-insert --complete-insert --single-transaction --max_allowed_packet=1G --result-file=files.sql db File
+	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} cp --retries=10 default/$(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name | sed 's#.*/##'):files.sql files.sql
 
-SQL_DEVELOPMENT := backup-21-09-2022-without-file-constraints.sql
+SQL_BACKUP_DIRECTORY := backup-24-09-2022
+
 database-development-restore:
-	@kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/${SQL_DEVELOPMENT}
-database-development-restore-products-images:
-	@kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/product-images-only.sql
+	@kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/${SQL_BACKUP_DIRECTORY}/files.sql
+	@kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_DEVELOPMENT} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/${SQL_BACKUP_DIRECTORY}/main.sql
 
-SQL_PRODUCTION := backup-21-09-2022-without-file-constraints.sql
 database-production-restore:
-	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/${SQL_PRODUCTION}
-database-production-restore-products-images:
-	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/product-images-only.sql
+	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/${SQL_BACKUP_DIRECTORY}/files.sql
+	@kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} exec -it $(shell kubectl --kubeconfig=${KUBECONFIG_PRODUCTION} get pods -l app=alterconso-mysql -o name) -- mysql -u docker -pdocker db < database-dumps/${SQL_BACKUP_DIRECTORY}/main.sql
 
 # ---------------------------------------------------------------------------- #
 # Global configuration

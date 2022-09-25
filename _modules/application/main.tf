@@ -34,6 +34,26 @@ resource "helm_release" "alterconso" {
   }
 
   set {
+    name  = "app.cronjobs.opening-order.image_repository"
+    value = var.mailer_image_repository
+  }
+
+  set {
+    name  = "app.cronjobs.opening-order.image_tag"
+    value = var.mailer_image_tag
+  }
+
+  set {
+    name  = "app.cronjobs.closing-order.image_repository"
+    value = var.mailer_image_repository
+  }
+
+  set {
+    name  = "app.cronjobs.closing-order.image_tag"
+    value = var.mailer_image_tag
+  }
+
+  set {
     name  = "app.ingress.hosts[0].host"
     value = var.webapp_ingress_host
   }
