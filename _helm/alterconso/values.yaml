@@ -6,7 +6,7 @@ app:
   # --------------------------#
   configuration:
     webapp:
-      vhost: alterconso.leportail.org
+      # vhost: alterconso.leportail.org
       sql_log_enabled: false
       debug_enabled: true
       mailer_host: localhost
@@ -25,24 +25,25 @@ app:
       schedule: 0 9 * * MON
       image_repository: alterconso-mailer
       image_tag: 1.0.0
-      command_arguments:
-        - remind
-        - --subject "Les commandes sont ouvertes"
-        - --group-name "Alterconso du Val de Brenne"
-        - --template-name "opening_order"
-        - --template-address "alterconso.leportail.org"
-        - --sender-mail "alterconso@leportail.org"
+      database_uri: alterconso-mysql.default.svc.cluster.local:3306
+      mailer_uri: alterconso.default.svc.cluster.local:5000
+      subject: Les commandes sont ouvertes
+      group_name: Alterconso du Val de Brenne
+      template_name: opening_order
+      template_address: alterconso.leportail.org
+      sender_mail: alterconso@leportail.org
+
     closing-order:
-      schedule: 0 9 * * THU
+      schedule: 0 9 * * WED
       image_repository: alterconso-mailer
       image_tag: 1.0.0
-      command_arguments:
-        - remind
-        - --subject "Les commandes vont bientôt fermer"
-        - --group-name "Alterconso du Val de Brenne"
-        - --template-name "closing_order"
-        - --template-address "alterconso.leportail.org"
-        - --sender-mail "alterconso@leportail.org"
+      database_uri: alterconso-mysql.default.svc.cluster.local:3306
+      mailer_uri: alterconso.default.svc.cluster.local:5000
+      subject: Les commandes vont bientôt fermer
+      group_name: Alterconso du Val de Brenne
+      template_name: closing_order
+      template_address: alterconso.leportail.org
+      sender_mail: alterconso@leportail.org
 
   # containers configuration #
   # -------------------------#
@@ -85,12 +86,21 @@ app:
         requests:
           cpu: 150m
           memory: 64Mi
+
   serviceAccount:
     create: true
     name: ""
+
   service:
     type: ClusterIP
-    port: 80
+    ports:
+      - name: http
+        port: 80
+        target: 80
+      - name: mailer
+        port: 5000
+        target: 5000
+
   ingress:
     enabled: true
     className: ""
@@ -105,10 +115,13 @@ app:
         paths:
           - path: /
             pathType: Prefix
+            backend:
+              port: 80
     tls:
       - hosts:
         - alterconso.leportail.org
         secretName: alterconso.leportail.org-tls
+
   autoscaling:
     enabled: true
     minReplicas: 1

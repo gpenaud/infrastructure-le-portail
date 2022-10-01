@@ -14,6 +14,25 @@ spec:
           - name: {{ $name }}
             image: {{ $cronjob.image_repository }}:{{ $cronjob.image_tag }}
             imagePullPolicy: IfNotPresent
-            command: {{ $cronjob.command_arguments }}
+            args:
+              - remind
+              - --database-uri
+              - {{ $cronjob.database_uri }}
+              - --mailer-uri
+              - {{ $cronjob.mailer_uri }}
+              - --subject
+              - {{ $cronjob.subject }}
+              - --group-name
+              - {{ $cronjob.group_name }}
+              - --template-name
+              - {{ $cronjob.template_name }}
+              - --template-address
+              - {{ $cronjob.template_address }}
+              - --sender-mail
+              - {{ $cronjob.sender_mail }}
+              {{ if $cronjob.test_mail_address }}
+              - --test-mail-address
+              - {{ $cronjob.test_mail_address }}
+              {{ end }}
           restartPolicy: OnFailure
 {{- end }}
