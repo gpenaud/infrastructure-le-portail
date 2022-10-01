@@ -48,13 +48,6 @@ resource "scaleway_instance_security_group" "mail" {
   }
 }
 
-resource "scaleway_registry_namespace" "registry" {
-  count       = var.registry_create ? 1 : 0
-  name        = var.registry_name
-  description = "${var.registry_name} container registry"
-  is_public   = var.registry_is_public
-}
-
 resource "null_resource" "kubeconfig" {
   depends_on = [scaleway_k8s_pool.default]
   triggers = {

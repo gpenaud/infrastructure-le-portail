@@ -7,8 +7,8 @@ data "sops_file" "prometheus-operator-resources-secrets" {
   source_file = "${var.root_path}/_helm/monitoring/prometheus/operator-resources/secrets.yaml"
 }
 
-data "sops_file" "scw-credentials-secrets" {
-  source_file = "${var.root_path}/${var.environment}/scw-credentials.yaml"
+data "sops_file" "external-dns-secrets" {
+  source_file = "${var.root_path}/${var.environment}/external-dns-secret-values.yaml"
 }
 
 #
@@ -112,12 +112,12 @@ resource "helm_release" "external-dns" {
 
   set {
     name  = "external_dns_access_key"
-    value = data.sops_file.scw-credentials-secrets.data["scw_access_key"]
+    value = data.sops_file.external-dns-secrets.data["scw_access_key"]
   }
 
   set {
     name  = "external_dns_secret_key"
-    value = data.sops_file.scw-credentials-secrets.data["scw_secret_key"]
+    value = data.sops_file.external-dns-secrets.data["scw_secret_key"]
   }
 }
 
