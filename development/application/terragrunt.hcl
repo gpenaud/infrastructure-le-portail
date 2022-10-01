@@ -1,15 +1,7 @@
 
 inputs = {
-  force_helm_upgrade             = true
-  certificate_issuer             = "letsencrypt-staging-clusterissuer"
-  webapp_image_repository        = "rg.fr-par.scw.cloud/le-portail-development/alterconso/webapp"
-  webapp_image_tag               = "0.3.0"
-  mailer_image_repository        = "rg.fr-par.scw.cloud/le-portail-development/alterconso/mailer"
-  mailer_image_tag               = "0.1.7"
-  webapp_vhost                   = "development-alterconso.leportail.org"
-  webapp_ingress_host            = "development-alterconso.leportail.org"
-  webapp_ingress_tls_host        = "development-alterconso.leportail.org"
-  webapp_ingress_tls_secret_name = "development-alterconso.leportail.org-tls"
+  force_helm_upgrade      = true
+  environment_values_file = "${local.root_path}/${local.environment}/alterconso-values.yaml"
 }
 
 dependency "subsystems" {
