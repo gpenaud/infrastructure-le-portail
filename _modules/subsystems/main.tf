@@ -8,7 +8,7 @@ data "sops_file" "prometheus-operator-resources-secrets" {
 }
 
 data "sops_file" "external-dns-secrets" {
-  source_file = "${var.root_path}/${var.environment}/external-dns-secret-values.yaml"
+  source_file = "${var.root_path}/${var.environment}/subsystems/external-dns/encrypted.yaml"
 }
 
 #

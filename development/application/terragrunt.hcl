@@ -1,7 +1,8 @@
 
 inputs = {
-  force_helm_upgrade      = true
-  environment_values_file = "${local.root_path}/${local.environment}/alterconso-values.yaml"
+  force_helm_upgrade = true
+  // environment_path   = "${local.root_path}/${local.environment}"
+  environment = local.environment
 }
 
 dependency "subsystems" {

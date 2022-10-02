@@ -41,8 +41,6 @@ app:
   # ------------------------#
 
   ingress:
-    enabled: true
-    className: ""
     annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-staging-clusterissuer"
     hosts:
