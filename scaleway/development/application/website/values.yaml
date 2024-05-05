@@ -1,0 +1,22 @@
+
+wordpressUsername: le-portail
+wordpressPassword: frayanadele71!
+wordpressEmail: guillaume.penaud@gmail.com
+wordpressFirstName: Guillaume
+wordpressLastName: Penaud
+wordpressBlogName: "blog de l'Ecolieu du Portail"
+wordpressTablePrefix: lp
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  pathType: Prefix 
+  hostname: development.new.leportail.org
+  path: /
+  annotations: 
+    cert-manager.io/cluster-issuer: "letsencrypt-staging-clusterissuer"
+  tls: true
+

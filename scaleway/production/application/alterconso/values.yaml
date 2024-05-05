@@ -1,0 +1,56 @@
+---
+app:
+
+  # --------------------------#
+  # application configuration #
+  # --------------------------#
+
+  configuration:
+    webapp:
+      vhost: alterconso.leportail.org
+
+  # -------------------------#
+  # containers configuration #
+  # -------------------------#
+
+  containers:
+    webapp:
+      image:
+        repository: rg.fr-par.scw.cloud/le-portail-common/alterconso/webapp
+        tag: 0.3.1
+    mailer:
+      image:
+        repository: rg.fr-par.scw.cloud/le-portail-common/alterconso/mailer
+        tag: 0.2.3
+
+  # -----------------------#
+  # cronjobs configuration #
+  # -----------------------#
+
+  cronjobs:
+    opening-order:
+      image_repository: rg.fr-par.scw.cloud/le-portail-common/alterconso/mailer
+      image_tag: 0.2.3
+
+    closing-order:
+      image_repository: rg.fr-par.scw.cloud/le-portail-common/alterconso/mailer
+      image_tag: 0.2.3
+
+  # ------------------------#
+  # ingresses configuration #
+  # ------------------------#
+
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-production-clusterissuer"
+    hosts:
+      - host: alterconso.leportail.org
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              port: 80
+    tls:
+      - hosts:
+        - alterconso.leportail.org
+        secretName: alterconso.leportail.org-tls

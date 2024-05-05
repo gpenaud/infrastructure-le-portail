@@ -1,0 +1,24 @@
+
+wordpressUsername: ecolieu-du-portail
+wordpressPassword: frayanadele71!
+wordpressEmail: guillaume.penaud@gmail.com
+wordpressFirstName: Ecolieu
+wordpressLastName: Du-Portail
+wordpressBlogName: "Blog de l'Ecolieu du Portail"
+wordpressTablePrefix: edp
+
+customHTAccessCM: le-portail-htaccess
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  pathType: Prefix 
+  hostname: www.leportail.org
+  path: /
+  annotations: 
+    cert-manager.io/cluster-issuer: "letsencrypt-production-clusterissuer"
+  tls: true
+

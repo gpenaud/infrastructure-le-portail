@@ -1,0 +1,24 @@
+
+wordpressUsername: transmat
+wordpressPassword: transmat
+wordpressEmail: guillaume.penaud@gmail.com
+wordpressFirstName: Transmat
+wordpressLastName: Transmat
+wordpressBlogName: "Société de transport Transmat"
+wordpressTablePrefix: tra
+
+# customHTAccessCM: le-portail-htaccess
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  pathType: Prefix 
+  hostname: transmat.leportail.org
+  path: /
+  annotations: 
+    cert-manager.io/cluster-issuer: "letsencrypt-production-clusterissuer"
+  tls: true
+

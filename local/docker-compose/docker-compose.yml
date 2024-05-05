@@ -1,0 +1,63 @@
+version: "3.7"
+
+networks:
+  alterconso:
+
+volumes:
+  database:
+
+# secrets:
+#   smtp-user:
+#     file: ./.secrets/smtp-user.txt
+#   smtp-password:
+#     file: ./.secrets/smtp-password.txt
+
+services:
+  webapp:
+    image: gpenaud/alterconso-webapp
+    build:
+      context: ./../../webapp
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./../../webapp/configuration/apache2/apache2.conf:/etc/apache2/apache2.conf
+      - ./../../webapp/configuration/apache2/certificates:/etc/apache2/certificates
+      - ./../../webapp/configuration/apache2/vhosts/https.conf:/etc/apache2/sites-available/alterconso.localhost.conf
+      - ./../../webapp/configuration/apache2/vhosts/https.conf:/etc/apache2/sites-enabled/alterconso.localhost.conf
+      - ./../../webapp/configuration/app/config.xml:/var/www/alterconso/config.xml
+    depends_on:
+      - mysql
+    networks:
+      - alterconso
+
+  mailer:
+    hostname: mailer
+    # image: alterconso/mailer:latest
+    image: alterconso/mailer-production:latest
+    build:
+      context: ./../../microservices/mailer
+    ports:
+      - 5000:5000
+    command: serve --config-file config.yaml
+    depends_on:
+      - webapp
+    networks:
+      - alterconso
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    ports:
+      - 3306:3306
+    volumes:
+      - database:/var/lib/mysql
+      - ./../../webapp/configuration/mysql/dumps/:/root/dumps
+      - ./../../webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - alterconso

@@ -1,0 +1,150 @@
+version: v2beta1
+name: alterconso
+
+vars:
+  WEBAPP_SOURCES_PATH: ./../../../webapp
+  MAILER_SOURCES_PATH: ./../../../microservices/mailer
+  HELM_PATH: ./../../_helm
+  LOCAL_DOCKER_REGISTRY_HOST: devspace-registry.localhost
+  LOCAL_DOCKER_REGISTRY_PORT:
+    command: k3d registry list --output json | jq '.[] | select(.name=="devspace-registry") | .portMappings."5000/tcp" | .[0].HostPort' | tr -d '"'
+  K3D_DOCKER_REGISTRY: devspace-registry:5000
+
+pipelines:
+  dev:
+    run: |-
+      run_dependencies --all
+      create_deployments --all
+      start_dev alterconso
+  deploy:
+    run: |-
+      create_deployments --all
+  build:
+    run: |-
+      build_images --all
+
+images:
+  alterconso:
+    image: ${LOCAL_DOCKER_REGISTRY_HOST}:${LOCAL_DOCKER_REGISTRY_PORT}/gpenaud/alterconso-webapp
+    dockerfile: ${WEBAPP_SOURCES_PATH}/Dockerfile
+    context: ${WEBAPP_SOURCES_PATH}
+    tags:
+      - latest
+      - 0.3.0
+  mailer:
+    image: ${LOCAL_DOCKER_REGISTRY_HOST}:${LOCAL_DOCKER_REGISTRY_PORT}/gpenaud/alterconso-mailer
+    dockerfile: ${MAILER_SOURCES_PATH}/Dockerfile
+    context: ${MAILER_SOURCES_PATH}
+    tags:
+      - latest
+      - 0.2.3
+
+deployments:
+  alterconso:
+    updateImageTags: false
+    helm:
+      chart:
+        name: ${HELM_PATH}/alterconso
+      valuesFiles:
+        - ${HELM_PATH}/alterconso/values.yaml
+        - ${HELM_PATH}/alterconso/sops-secrets.yaml
+      values:
+        app:
+          configuration:
+            webapp:
+              vhost: alterconso.localhost
+          containers:
+            webapp:
+              image:
+                repository: ${K3D_DOCKER_REGISTRY}/gpenaud/alterconso-webapp
+                tag: 0.3.0
+            mailer:
+              image:
+                repository: ${K3D_DOCKER_REGISTRY}/gpenaud/alterconso-mailer
+                tag: 0.2.3
+          ingress:
+            annotations:
+              cert-manager.io/cluster-issuer: "letsencrypt-staging-clusterissuer"
+            hosts:
+              - host: alterconso.localhost
+                paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                      port: 80
+            tls:
+              - hosts:
+                - alterconso.localhost
+                secretName: alterconso.localhost-tls
+
+# This is a list of `dev` containers that are based on the containers created by your deployments
+dev:
+  alterconso:
+    # Search for the container that runs this image
+    imageSelector: ${K3D_DOCKER_REGISTRY}/gpenaud/alterconso-webapp
+    sync:
+      - path: ${WEBAPP_SOURCES_PATH}
+        uploadExcludeFile: .dockerignore
+      - path: ./
+    # Open a terminal and use the following command to start it
+    terminal:
+      command: ./devspace_start.sh
+    # Inject a lightweight SSH server into the container (so your IDE can connect to the remote dev env)
+    ssh:
+      enabled: true
+    # Make the following commands from my local machine available inside the dev container
+    proxyCommands:
+      - command: devspace
+      - command: kubectl
+      - command: helm
+      - command: git
+    # Forward the following ports to be able access your application via localhost
+    ports:
+      - port: "8080:80"
+    # Open the following URLs once they return an HTTP status code other than 502 or 503
+    open:
+      - url: http://localhost:8080
+
+commands:
+  generate-certificates:
+    description: --- Install mkcert package and generate a wildcard certificate for bensound.localhost domain
+    command: |-
+      sudo apt install mkcert
+      mkcert -install
+      mkcert "*.bensound.localhost"
+  remove-cluster:
+    description: --- Remove k3d cluster and its kubeconfig file
+    command: |-
+      k3d cluster delete devspace
+      rm --force kubeconfig
+  create-cluster:
+    description: --- Create a k3d cluster with a registry and an ingress controller
+    command: |-
+      k3d cluster create devspace --registry-create devspace-registry -p "443:80@loadbalancer"
+      k3d kubeconfig get devspace > kubeconfig
+  init-cluster:
+    description: --- Add the wildcard certificates within the cluster and remove it locally
+    command: |-
+      kubectl --kubeconfig=kubeconfig create secret tls wildcard-tls-cert --key=_wildcard.bensound.localhost-key.pem --cert=_wildcard.bensound.localhost.pem
+      rm --force _wildcard.bensound.localhost-key.pem _wildcard.bensound.localhost.pem
+  up:
+    description: --- Spawn the whole cluster, generate images and deploy helm chart
+    command: |-
+      devspace run create-cluster
+      devspace run generate-certificates
+      devspace run init-cluster
+      devspace build
+      devspace --kubeconfig=kubeconfig deploy
+  clean:
+    description: --- Remove cluster and certificates local files
+    command: |-
+      devspace run remove-cluster
+      rm --force _wildcard.bensound.localhost-key.pem _wildcard.bensound.localhost.pem
+
+# Define dependencies to other projects with a devspace.yaml
+# dependencies:
+#   api:
+#     git: https://...  # Git-based dependencies
+#     tag: v1.0.0
+#   ui:
+#     path: ./ui        # Path-based dependencies (for monorepos)

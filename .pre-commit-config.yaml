@@ -1,9 +1,9 @@
-repos:
-- repo: https://github.com/yuvipanda/pre-commit-hook-ensure-sops
-  rev: v1.0
-  hooks:
-    - id: sops-encryption
-      # Be aggressive - ensure anything with the word secret in the filename
-      # or file path is encryped. Users of individual repos can exclude things
-      # with `exclude` if necessary.
-      files: .*(-?)encrypted.yaml
+# repos:
+# - repo: https://github.com/yuvipanda/pre-commit-hook-ensure-sops
+#   rev: v1.0
+#   hooks:
+#     - id: sops-encryption
+#       # Be aggressive - ensure anything with the word secret in the filename
+#       # or file path is encryped. Users of individual repos can exclude things
+#       # with `exclude` if necessary.
+#       files: .*(-?)encrypted.yaml

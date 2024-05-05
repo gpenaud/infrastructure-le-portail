@@ -1,0 +1,17 @@
+varsEncrypted: true
+images:
+    alterconso:
+        imageConfigHash: ddb0082537e10af1e1ca0af8f1665cf5eb7143c9975d33adfa556ecd16dc7d13
+        dockerfileHash: 7c0a2860ce0c2060a8f88ebcfbb9729961638181d9126896704c4f3a6d5776f3
+        contextHash: 504d36d2ecdb17741c65ae89b2e4dfe5c58ea585636be0b35245e854643a00aa
+        imageName: devspace-registry.localhost:36887/gpenaud/alterconso-webapp
+        tag: latest
+    mailer:
+        imageConfigHash: 62801b64925b577fb5842a14dc56c30003358e06f59249968bf48d88b8430d2c
+        dockerfileHash: 670db7ea64c0471af91f5f88604e73056112150ad091206709097adcc60581b1
+        contextHash: 74eac19dd1b2b15f2d47662a375c372f2bfcabbcebd74d0250e2ff45da3f0471
+        imageName: devspace-registry.localhost:36887/gpenaud/alterconso-mailer
+        tag: latest
+lastContext:
+    namespace: default
+    context: k3d-devspace

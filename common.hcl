@@ -1,3 +1,3 @@
 locals {
-  root_path = "/home/gpenaud/work/alterconso/infrastructure"
+  root_path = "/home/gpenaud/work/le-portail/infrastructure"
 }

@@ -1,0 +1,122 @@
+{"level":"info","msg":"dev:alterconso Waiting for pod to become ready...","time":"2022-11-24T09:02:06+01:00"}
+{"level":"info","msg":"dev:alterconso Selected pod alterconso-devspace-58fd56c49b-ffwhf","time":"2022-11-24T09:02:07+01:00"}
+{"level":"info","msg":"dev:alterconso open  Opening 'http://localhost:3000' as soon as application will be started","time":"2022-11-24T09:02:07+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:02:08+01:00"}
+{"level":"info","msg":"dev:alterconso Waiting for pod to become ready...","time":"2022-11-24T09:02:39+01:00"}
+{"level":"info","msg":"dev:alterconso Selected pod alterconso-devspace-58fd56c49b-ffwhf","time":"2022-11-24T09:02:39+01:00"}
+{"level":"info","msg":"dev:alterconso open  Opening 'http://localhost:3000' as soon as application will be started","time":"2022-11-24T09:02:39+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:02:40+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./../../../webapp \u003c-\u003e ./../../../webapp","time":"2022-11-24T09:02:40+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T09:02:40+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T09:02:52+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Port forwarding started on: 10096 -\u003e 8022","time":"2022-11-24T09:02:52+01:00"}
+{"level":"info","msg":"dev:alterconso proxy Port forwarding started on: 10273 \u003c- 10567","time":"2022-11-24T09:02:53+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Use 'ssh alterconso.alterconso.devspace' to connect via SSH","time":"2022-11-24T09:02:53+01:00"}
+{"level":"info","msg":"dev:alterconso term  Opening shell to webapp:alterconso-devspace-58fd56c49b-ffwhf (pod:container)","time":"2022-11-24T09:02:55+01:00"}
+{"level":"info","msg":"dev:alterconso Waiting for pod to become ready...","time":"2022-11-24T09:03:59+01:00"}
+{"level":"info","msg":"dev:alterconso Selected pod alterconso-devspace-58fd56c49b-ffwhf","time":"2022-11-24T09:04:00+01:00"}
+{"level":"info","msg":"dev:alterconso open  Opening 'http://localhost:3000' as soon as application will be started","time":"2022-11-24T09:04:00+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:04:00+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./../../../webapp \u003c-\u003e ./../../../webapp","time":"2022-11-24T09:04:01+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T09:04:01+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./ \u003c-\u003e ./","time":"2022-11-24T09:04:03+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T09:04:03+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T09:04:03+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T09:04:07+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Port forwarding started on: 10096 -\u003e 8022","time":"2022-11-24T09:04:08+01:00"}
+{"level":"info","msg":"dev:alterconso proxy Port forwarding started on: 10312 \u003c- 10567","time":"2022-11-24T09:04:08+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Use 'ssh alterconso.alterconso.devspace' to connect via SSH","time":"2022-11-24T09:04:09+01:00"}
+{"level":"info","msg":"dev:alterconso term  Opening shell to webapp:alterconso-devspace-58fd56c49b-ffwhf (pod:container)","time":"2022-11-24T09:04:11+01:00"}
+{"level":"info","msg":"dev:alterconso Waiting for pod to become ready...","time":"2022-11-24T09:04:40+01:00"}
+{"level":"info","msg":"dev:alterconso Selected pod alterconso-devspace-58fd56c49b-ffwhf","time":"2022-11-24T09:04:41+01:00"}
+{"level":"info","msg":"dev:alterconso open  Opening 'http://localhost:3000' as soon as application will be started","time":"2022-11-24T09:04:41+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:04:41+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./../../../webapp \u003c-\u003e ./../../../webapp","time":"2022-11-24T09:04:42+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T09:04:42+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./ \u003c-\u003e ./","time":"2022-11-24T09:04:44+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T09:04:44+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T09:04:44+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T09:04:48+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Port forwarding started on: 10096 -\u003e 8022","time":"2022-11-24T09:04:48+01:00"}
+{"level":"info","msg":"dev:alterconso proxy Port forwarding started on: 11940 \u003c- 10567","time":"2022-11-24T09:04:49+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Use 'ssh alterconso.alterconso.devspace' to connect via SSH","time":"2022-11-24T09:04:49+01:00"}
+{"level":"info","msg":"dev:alterconso term  Opening shell to webapp:alterconso-devspace-58fd56c49b-ffwhf (pod:container)","time":"2022-11-24T09:04:51+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:43:34+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:43:35+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:44:11+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:44:12+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:44:43+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:44:44+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:45:46+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:45:46+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:46:48+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:46:48+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:47:50+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:47:50+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:48:27+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:48:27+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:48:59+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:48:59+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:49:31+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:49:31+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:51:36+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:51:37+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:52:08+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:52:09+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:53:10+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:53:11+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:55:15+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:55:16+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:55:47+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:55:48+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:56:49+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:56:50+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:57:51+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:57:52+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T09:59:57+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T09:59:57+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:00:29+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T10:00:29+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:01:31+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T10:01:31+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:02:03+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T10:02:03+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating forwarding stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:47:16+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T10:47:17+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:48:32+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T10:48:33+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:49:04+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80, 8443 -\u003e 443","time":"2022-11-24T10:49:05+01:00"}
+{"level":"info","msg":"dev:alterconso Waiting for pod to become ready...","time":"2022-11-24T10:54:20+01:00"}
+{"level":"info","msg":"dev:alterconso Selected pod alterconso-devspace-58fd56c49b-ffwhf","time":"2022-11-24T10:54:20+01:00"}
+{"level":"info","msg":"dev:alterconso open  Opening 'http://localhost:8080' as soon as application will be started","time":"2022-11-24T10:54:20+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80","time":"2022-11-24T10:54:21+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./ \u003c-\u003e ./","time":"2022-11-24T10:54:21+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T10:54:21+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./../../../webapp \u003c-\u003e ./../../../webapp","time":"2022-11-24T10:54:23+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T10:54:23+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T10:54:24+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T10:54:25+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Port forwarding started on: 10096 -\u003e 8022","time":"2022-11-24T10:54:26+01:00"}
+{"level":"info","msg":"dev:alterconso proxy Port forwarding started on: 10436 \u003c- 10567","time":"2022-11-24T10:54:27+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Use 'ssh alterconso.alterconso.devspace' to connect via SSH","time":"2022-11-24T10:54:28+01:00"}
+{"level":"info","msg":"dev:alterconso term  Opening shell to webapp:alterconso-devspace-58fd56c49b-ffwhf (pod:container)","time":"2022-11-24T10:54:29+01:00"}
+{"level":"info","msg":"dev:alterconso Waiting for pod to become ready...","time":"2022-11-24T10:55:29+01:00"}
+{"level":"info","msg":"dev:alterconso Selected pod alterconso-devspace-b85dddfcb-76qvl","time":"2022-11-24T10:55:31+01:00"}
+{"level":"info","msg":"dev:alterconso open  Opening 'http://localhost:8080' as soon as application will be started","time":"2022-11-24T10:55:31+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80","time":"2022-11-24T10:55:31+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./../../../webapp \u003c-\u003e ./../../../webapp","time":"2022-11-24T10:55:33+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T10:55:33+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Sync started on: ./ \u003c-\u003e ./","time":"2022-11-24T10:55:34+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Waiting for initial sync to complete","time":"2022-11-24T10:55:34+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T10:55:39+01:00"}
+{"level":"info","msg":"dev:alterconso sync  Initial sync completed","time":"2022-11-24T10:55:46+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Port forwarding started on: 10096 -\u003e 8022","time":"2022-11-24T10:55:47+01:00"}
+{"level":"info","msg":"dev:alterconso proxy Port forwarding started on: 11192 \u003c- 10567","time":"2022-11-24T10:55:48+01:00"}
+{"level":"info","msg":"dev:alterconso ssh   Use 'ssh alterconso.alterconso.devspace' to connect via SSH","time":"2022-11-24T10:55:48+01:00"}
+{"level":"info","msg":"dev:alterconso term  Opening shell to webapp:alterconso-devspace-b85dddfcb-76qvl (pod:container)","time":"2022-11-24T10:55:50+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:56:05+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80","time":"2022-11-24T10:56:05+01:00"}
+{"level":"error","msg":"dev:alterconso ports Restarting because: error creating error stream for port 8080 -\u003e 80: Timeout occurred","time":"2022-11-24T10:56:39+01:00"}
+{"level":"info","msg":"dev:alterconso ports Port forwarding started on: 8080 -\u003e 80","time":"2022-11-24T10:56:39+01:00"}
+{"level":"info","msg":"dev:alterconso open  Successfully opened http://localhost:8080","time":"2022-11-24T10:56:41+01:00"}
