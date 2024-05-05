@@ -1,10 +1,12 @@
 version: "3.7"
 
 networks:
+  reverse-proxy:
   alterconso:
+  le-portail:
 
 volumes:
-  database:
+  alterconso-database:
 
 # secrets:
 #   smtp-user:
@@ -13,14 +15,34 @@ volumes:
 #     file: ./.secrets/smtp-password.txt
 
 services:
-  webapp:
+  # ------------------------------------------------------------------------------ #
+  #                              NGINX REVERSE-PROXY                               #
+  # ------------------------------------------------------------------------------ #
+
+  reverse-proxy:
+    image: nginx:latest
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./../../applications/reverse-proxy/sites:/etc/nginx/conf.d
+      - ./../../applications/reverse-proxy/certificates:/etc/nginx/certificates
+    networks:
+      - reverse-proxy
+      - alterconso
+      - le-portail
+
+  # ------------------------------------------------------------------------------ #
+  #                                   ALTERCONSO                                   #
+  # ------------------------------------------------------------------------------ #
+  alterconso-webapp:
     image: gpenaud/alterconso-webapp
     build:
       context: ./../../applications/alterconso/webapp
     restart: always
     ports:
-      - 80:80
-      - 443:443
+      - 80
     volumes:
       - ./../../applications/alterconso/webapp/configuration/apache2/apache2.conf:/etc/apache2/apache2.conf
       - ./../../applications/alterconso/webapp/configuration/apache2/certificates:/etc/apache2/certificates
@@ -32,7 +54,7 @@ services:
     networks:
       - alterconso
 
-  mailer:
+  alterconso-mailer:
     hostname: mailer
     # image: alterconso/mailer:latest
     image: alterconso/mailer-production:latest
@@ -46,7 +68,7 @@ services:
     networks:
       - alterconso
 
-  mysql:
+  alterconso-mysql:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -56,8 +78,19 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - database:/var/lib/mysql
+      - alterconso-database:/var/lib/mysql
       - ./../../applications/alterconso/webapp/configuration/mysql/dumps/:/root/dumps
       - ./../../applications/alterconso/webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
       - alterconso
+
+  # ------------------------------------------------------------------------------ #
+  #                            LE-PORTAIL (WORDPRESS)                              #
+  # ------------------------------------------------------------------------------ #
+
+  le-portail-webserver:
+    image: nginx:latest
+    ports:
+      - 80
+    networks:
+      - le-portail

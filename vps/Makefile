@@ -16,7 +16,7 @@ up-development:
 ## Start, then log alterconso stack locally, but force build first (without --no-cache option)
 up-with-build:
 	docker compose up --build --detach
-	docker compose logs --follow webapp mailer
+	docker compose logs --follow reverse-proxy
 
 ## Stop local alterconso stack
 down:
@@ -25,6 +25,10 @@ down:
 ## Connect within webapp container with /bin/bash
 enter:
 	docker compose exec --user root webapp bash
+
+## Connect within reverse-proxy container with /bin/bash
+enter-reverse-proxy:
+	docker compose exec --user root reverse-proxy bash
 
 ## clear images cached
 cache-clear:
@@ -37,20 +41,20 @@ SQL_BACKUP_DIRECTORY := backup-04-05-2024
 
 ## Backups database from its development version
 database-restore:
-	docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/backup.sql $(shell docker compose ps -q mysql):/backup.sql
-	docker compose exec mysql sh -c "mysql -u docker -pdocker db  < backup.sql"
-	# docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/files.sql $(shell docker compose ps -q mysql):/files.sql
-	# docker compose exec mysql sh -c "mysql -u docker -pdocker db  < files.sql"
-	# docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/main.sql $(shell docker compose ps -q mysql):/main.sql
-	# docker compose exec mysql sh -c "mysql -u docker -pdocker db  < main.sql"
+	docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/backup.sql $(shell docker compose ps -q alterconso-mysql):/backup.sql
+	docker compose exec alterconso-mysql sh -c "mysql -u docker -pdocker db  < backup.sql"
+	# docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/files.sql $(shell docker compose ps -q alterconso-mysql):/files.sql
+	# docker compose exec alterconso-mysql sh -c "mysql -u docker -pdocker db  < files.sql"
+	# docker cp database-dumps/${SQL_BACKUP_DIRECTORY}/main.sql $(shell docker compose ps -q alterconso-mysql):/main.sql
+	# docker compose exec alterconso-mysql sh -c "mysql -u docker -pdocker db  < main.sql"
 
 # ---------------------------------------------------------------------------- #
 
 recompile-backend:
-	docker compose exec --user root --workdir /var/www/alterconso/backend webapp  sh -c "haxe alterconso.hxml"
+	docker compose exec --user root --workdir /var/www/alterconso/backend alterconso-webapp  sh -c "haxe alterconso.hxml"
 
 recompile-frontend:
-	docker compose exec --user root --workdir /var/www/alterconso/frontend webapp sh -c "haxe alterconsoJs.hxml"
+	docker compose exec --user root --workdir /var/www/alterconso/frontend alterconso-webapp sh -c "haxe alterconsoJs.hxml"
 
 test-generic:
 	docker compose exec --user root --workdir /var/www/alterconso/www webapp sh -c "neko index.n cron/test"
@@ -69,8 +73,12 @@ certificates-install-mkcert:
 
 ## Generate self-signed certificates
 certificates-generate:
-	mkcert -cert-file configuration/apache2/certificates/cert.pem -key-file configuration/apache2/certificates/key.pem alterconso.localhost
-	chmod 0644 configuration/apache2/certificates/key.pem
+# mkcert -cert-file configuration/apache2/certificates/cert.pem -key-file configuration/apache2/certificates/key.pem alterconso.localhost
+# chmod 0644 configuration/apache2/certificates/key.pem
+	mkcert -cert-file ../../applications/reverse-proxy/certificates/le-portail/cert.pem -key-file ../../applications/reverse-proxy/certificates/le-portail/key.pem leportail.localhost www.leportail.localhost
+	chmod 0644 ../../applications/reverse-proxy/certificates/le-portail/key.pem
+
+	
 
 ## Colors
 COLOR_RESET       = $(shell tput sgr0)
