@@ -54,7 +54,7 @@ recompile-backend:
 	docker compose exec --user root --workdir /var/www/alterconso/backend alterconso-webapp  sh -c "haxe alterconso.hxml"
 
 recompile-frontend:
-	docker compose exec --user root --workdir /var/www/alterconso/frontend alterconso-webapp sh -c "haxe alterconsoJs.hxml"
+	docker compose exec --user root --workdir /var/www/alterconso/frontend alterconso-cd selfwebapp sh -c "haxe alterconsoJs.hxml"
 
 test-generic:
 	docker compose exec --user root --workdir /var/www/alterconso/www webapp sh -c "neko index.n cron/test"
