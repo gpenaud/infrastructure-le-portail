@@ -1,0 +1,7 @@
+
+- hosts: le-portail
+  gather_facts: false
+  roles:
+    - le-portail
+  tags:
+    - le-portail

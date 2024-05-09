@@ -1,0 +1,12 @@
+
+vps:
+  hosts:
+    # production
+    srv521992.hstgr.cloud:
+
+#
+# le-portail subgroup
+#
+le-portail:
+  children:
+    vps:

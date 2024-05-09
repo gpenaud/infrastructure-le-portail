@@ -1,0 +1,4 @@
+
+dependencies:
+  - role: alterconso-webapp
+  - role: alterconso-mailer

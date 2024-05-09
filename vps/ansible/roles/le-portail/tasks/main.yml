@@ -1,0 +1,10 @@
+
+- name: "configure : copy docker-compose template"
+  become: true
+  become_user: "{{ user }}"
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ project_path }}/docker-compose.yml"
+    mode: 0644
+  tags:
+    - copy-docker-compose
