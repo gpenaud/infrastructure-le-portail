@@ -1,0 +1,76 @@
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+  alterconso:
+
+  # ------------------------------------------------------------------------------ #
+  #                            LE-PORTAIL (WORDPRESS)                              #
+  # ------------------------------------------------------------------------------ #
+
+  nginx:
+    depends_on:
+      - wordpress
+    image: nginx:1.15.12-alpine
+    restart: unless-stopped
+    ports:
+      - 80
+    volumes:
+      - le-portail-wordpress:/var/www/html
+      - ${APPLICATIONS_PATH}/le-portail/nginx-conf:/etc/nginx/conf.d  
+    networks:
+      - le-portail
+
+  wordpress:
+    depends_on:
+      - mysql
+    image: wordpress:6.1.1-php8.2-fpm-alpine
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: docker
+      WORDPRESS_DB_PASSWORD: docker
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - le-portail-wordpress:/var/www/html
+    networks:
+      - le-portail
+
+  toolbox:
+    build: ${APPLICATIONS_PATH}/le-portail/toolbox/
+    volumes:
+      - le-portail-wordpress:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      WORDPRESS_LOCALE: fr_FR
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: docker
+      WORDPRESS_DB_PASSWORD: docker
+      WORDPRESS_WEBSITE_TITLE: "Ecolieu du Portail"
+      WORDPRESS_WEBSITE_URL: "https://leportail.localhost"
+      WORDPRESS_WEBSITE_URL_WITHOUT_HTTP: "leportail.localhost"
+      WORDPRESS_WEBSITE_POST_URL_STRUCTURE: "/%year%/%monthnum%/%day%/%postname%/"
+      WORDPRESS_ADMIN_USER: "admin"
+      WORDPRESS_ADMIN_PASSWORD: "admin"
+      WORDPRESS_ADMIN_EMAIL: "guillaume.penaud@gmail.com"
+    networks:
+      - le-portail
+
+  mysql:
+    image: mysql:8.0
+    hostname: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    volumes:
+      - le-portail-database:/var/lib/mysql  
+    ports:
+      - 3306
+    command: '--default-authentication-plugin=mysql_native_password'
+    networks:
+      - le-portail
