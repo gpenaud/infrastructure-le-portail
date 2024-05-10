@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+  ServerName  {{ webapp_application_fqdn }}
+  ServerAdmin  {{ webapp_admin_email }}
+
+  DocumentRoot /var/www/alterconso/www
+
+  LogLevel  warn
+  ErrorLog  /dev/stderr
+  CustomLog /dev/stdout combined
+
+  <Directory /var/www/alterconso/www>
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+    EnableSendfile Off
+  </Directory>
+</VirtualHost>

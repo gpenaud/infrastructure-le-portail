@@ -1,0 +1,34 @@
+
+- name: "Main : create traefik project directories"
+  ansible.builtin.file:
+    path: "{{ project_path }}/traefik/letsencrypt"
+    state: directory
+    recurse: yes
+  tags:
+    - traefik
+
+- name: "Main : copy docker-compose and .env templates"
+  ansible.builtin.template:
+    src: templates/{{ template }}.j2
+    dest: "{{ project_path }}/{{ template }}"
+    mode: 0644
+  loop:
+    - .env
+    - docker-compose.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - traefik
+
+- name: "Main : copy traefik templates"
+  ansible.builtin.template:
+    src: templates/configuration/{{ template }}.j2
+    dest: "{{ project_path }}/traefik/{{ template }}"
+    mode: 0644
+  loop:
+    - traefik.yml
+    - dynamic.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - traefik

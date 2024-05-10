@@ -1,0 +1,34 @@
+
+- name: "Main : copy docker-compose and .env templates"
+  ansible.builtin.template:
+    src: templates/{{ template }}.j2
+    dest: "{{ project_path }}/{{ template }}"
+    mode: 0644
+  loop:
+    - .env
+    - docker-compose.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - docker-compose
+
+- name: "Main : create traefik directory in sources/"
+  ansible.builtin.file:
+    path: "{{ application_sources_path }}/traefik"
+    state: directory
+    recurse: yes
+  tags:
+    - docker-compose
+
+- name: "Main : copy traefik templates"
+  ansible.builtin.template:
+    src: templates/traefik/{{ template }}.j2
+    dest: "{{ application_sources_path }}/traefik/{{ template }}"
+    mode: 0644
+  loop:
+    - traefik.yml
+    - dynamic.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - docker-compose

@@ -1,0 +1,16 @@
+
+- name: "Git - clone alterconso-mailer repository on master branch"
+  block:
+  - name: "Git - tries to clone magento repository"
+    ansible.builtin.git:
+      repo: "https://github.com/gpenaud/alterconso-mailer.git"
+      dest: "{{ mailer_project_path }}"
+      version: "{{ mailer_repository_branch | default(mailer_default_branch) }}"
+      force: "{% if force is defined and force == 'yes' %} true {% else %} false {% endif %}"
+    register: out
+    ignore_errors: true
+  
+  - name: "Git - check if failure is authorized or not"
+    fail:
+      msg: "The clonage of the repository failed for a bad reason : {{ out.msg }}"
+    when: "out.failed and 'Local modifications exist in the destination:' not in out.msg"

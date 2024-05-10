@@ -1,0 +1,22 @@
+
+networks:
+  traefik:
+    driver: bridge    
+    attachable: true
+    name: traefik
+
+services:
+  traefik:
+    image: traefik:2.5.3
+    ports:
+      - 8080:8080
+      - 80:80
+      - 443:443
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "${APPLICATIONS_PATH}/traefik/traefik.yml:/traefik.yml"
+      - "${APPLICATIONS_PATH}/traefik/dynamic.yml:/dynamic.yml"
+      - "${APPLICATIONS_PATH}/traefik/letsencrypt:/letsencrypt"
+    networks:
+      - traefik
+

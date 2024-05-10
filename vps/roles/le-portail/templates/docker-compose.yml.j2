@@ -1,0 +1,98 @@
+
+networks:
+  traefik:
+  alterconso:
+  le-portail:
+
+volumes:
+  alterconso-database:
+  le-portail-wordpress:
+  le-portail-database:
+
+services:
+  # ------------------------------------------------------------------------------ #
+  #                              NGINX REVERSE-PROXY                               #
+  # ------------------------------------------------------------------------------ #
+
+  traefik:
+    image: traefik:2.5.3
+    ports:
+      - 8080:8080
+      - 80:80
+      - 443:443
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "${APPLICATIONS_PATH}/traefik/traefik.yml:/traefik.yml"
+      - "${APPLICATIONS_PATH}/traefik/dynamic.yml:/dynamic.yml"
+      - "${APPLICATIONS_PATH}/traefik/acme.json:/acme.json"
+    networks:
+      - traefik
+      - alterconso
+      - le-portail
+
+  # reverse-proxy:
+  #   image: nginx:latest
+  #   tty: true
+  #   depends_on:
+  #     - alterconso-webapp
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - ${APPLICATIONS_PATH}/reverse-proxy/sites:/etc/nginx/conf.d
+  #     - ${APPLICATIONS_PATH}/reverse-proxy/certificates:/etc/nginx/certificates
+  #   networks:
+  #     - reverse-proxy
+  #     - alterconso
+  #     - le-portail
+
+  # ------------------------------------------------------------------------------ #
+  #                                   ALTERCONSO                                   #
+  # ------------------------------------------------------------------------------ #
+  alterconso-webapp:
+    image: alterconso/webapp
+    build: ${APPLICATIONS_PATH}/alterconso/webapp
+    restart: always
+    ports:
+      - 80
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.alterconso_by_host.rule=Host(`new-alterconso.leportail.org`)
+      - traefik.http.routers.alterconso_by_host.tls=true
+      - traefik.http.routers.alterconso_by_host.tls.certresolver=myresolver
+    volumes:
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/apache2/vhosts/alterconso.conf:/etc/apache2/sites-available/alterconso.conf
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/apache2/vhosts/alterconso.conf:/etc/apache2/sites-enabled/alterconso.conf
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/app/config.xml:/var/www/alterconso/config.xml
+    depends_on:
+      - alterconso-mysql
+    networks:
+      - alterconso
+
+  # alterconso-mailer:
+  #   hostname: mailer
+  #   image: alterconso/mailer:latest
+  #   build: ${APPLICATIONS_PATH}/alterconso/microservices/mailer
+  #   ports:
+  #     - 5000:5000
+  #   command: serve --config-file config.yaml
+  #   depends_on:
+  #     - alterconso-webapp
+  #   networks:
+  #     - alterconso
+
+  alterconso-mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    ports:
+      - 3306:3306
+    volumes:
+      - alterconso-database:/var/lib/mysql
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/mysql/dumps/:/root/dumps
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - alterconso

@@ -1,0 +1,19 @@
+
+vps:
+  hosts:
+    # production
+    srv521992.hstgr.cloud:
+
+#
+# traefik subgroup
+#
+traefik:
+  children:
+    vps:
+
+#
+# le-portail subgroup
+#
+le-portail:
+  children:
+    vps:

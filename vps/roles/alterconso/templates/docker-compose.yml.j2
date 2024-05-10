@@ -1,0 +1,65 @@
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+  alterconso:
+
+volumes:
+  alterconso-database:
+  le-portail-wordpress:
+  le-portail-database:
+
+services:
+  # ------------------------------------------------------------------------------ #
+  #                                   ALTERCONSO                                   #
+  # ------------------------------------------------------------------------------ #
+  alterconso-webapp:
+    image: alterconso/webapp
+    build: ${APPLICATIONS_PATH}/alterconso/webapp
+    restart: always
+    ports:
+      - 80
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.alterconso_by_host.rule=Host(`new-alterconso.leportail.org`)
+      - traefik.http.routers.alterconso_by_host.tls=true
+      - traefik.http.routers.alterconso_by_host.tls.certresolver=myresolver
+    volumes:
+      - ${APPLICATIONS_PATH}/webapp/configuration/apache2/vhosts/alterconso.conf:/etc/apache2/sites-available/alterconso.conf
+      - ${APPLICATIONS_PATH}/webapp/configuration/apache2/vhosts/alterconso.conf:/etc/apache2/sites-enabled/alterconso.conf
+      - ${APPLICATIONS_PATH}/webapp/configuration/app/config.xml:/var/www/alterconso/config.xml
+    depends_on:
+      - alterconso-mysql
+    networks:
+      - traefik
+      - alterconso
+
+  # alterconso-mailer:
+  #   hostname: mailer
+  #   image: alterconso/mailer:latest
+  #   build: ${APPLICATIONS_PATH}/alterconso/microservices/mailer
+  #   ports:
+  #     - 5000:5000
+  #   command: serve --config-file config.yaml
+  #   depends_on:
+  #     - alterconso-webapp
+  #   networks:
+  #     - alterconso
+
+  alterconso-mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    ports:
+      - 3306:3306
+    volumes:
+      - alterconso-database:/var/lib/mysql
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/mysql/dumps/:/root/dumps
+      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - alterconso

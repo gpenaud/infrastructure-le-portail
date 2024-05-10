@@ -1,0 +1,26 @@
+<config
+	lang="fr"
+	langs="fr;de;en"
+	langnames="Français;Deutsch;English"
+
+	host="{{ webapp_application_fqdn }}"
+	name = "{{ webapp_application_displayed_name }}"
+	default_email = "{{ webapp_application_email }}"
+	webmaster_email = "{{ webapp_admin_email }}"
+
+	database="mysql://{{ webapp_database_user }}:{{ webapp_database_password }}@{{ webapp_database_fqdn }}/db"
+
+	sqllog="0"
+	debug="1"
+	cache="0"
+	maintain="0"
+	cachetpl="0"
+	key="localdevkey"
+
+	mailer_host="{{ webapp_mailer_host }}"
+	mailer_port="{{ webapp_mailer_port }}"
+
+	alterconso_api="http://{{ webapp_application_fqdn }}:3010"
+/>
+
+alterconso_api

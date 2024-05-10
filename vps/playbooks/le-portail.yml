@@ -1,0 +1,18 @@
+
+- hosts: le-portail
+  gather_facts: true
+
+  pre_tasks:
+    - name: "Traefik - install traefik reverse-proxy"
+      ansible.builtin.include_role:
+        name: traefik
+      tags: traefik
+
+    - name: "Alterconso - install alterconso web-application"
+      ansible.builtin.include_role:
+        name: alterconso
+      tags: alterconso
+
+  tasks:
+    - debug:
+        msg: "hey toto"

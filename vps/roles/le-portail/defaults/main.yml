@@ -1,0 +1,10 @@
+
+project_path: "/home/{{ ansible_user }}"
+application_sources_path: "{{ project_path }}/sources"
+
+alterconso_fqdn: new-alterconso.leportail.org
+alterconso_fqdn_aliases: []
+
+le_portail_website_fqdn: new-website.leportail.org
+le_portail_website_fqdn_aliases: []
+
