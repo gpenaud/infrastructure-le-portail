@@ -14,3 +14,5 @@
     fail:
       msg: "The clonage of the repository failed for a bad reason : {{ out.msg }}"
     when: "out.failed and 'Local modifications exist in the destination:' not in out.msg"
+  tags:
+    - alterconso

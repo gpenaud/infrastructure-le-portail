@@ -2,10 +2,14 @@
 - name: "Sources Webapp - includes webapp sources"
   ansible.builtin.include_tasks:
     file: sources/webapp.yml
+  tags:
+    - alterconso
 
 - name: "Sources mailer - includes mailer sources"
   ansible.builtin.include_tasks:
     file: sources/mailer.yml
+  tags:
+    - alterconso
 
 - name: "Main : copy docker-compose and .env templates"
   ansible.builtin.template:
@@ -17,4 +21,6 @@
     - docker-compose.yml
   loop_control:
     loop_var: template
+  tags:
+    - alterconso
 

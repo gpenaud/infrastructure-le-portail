@@ -28,3 +28,5 @@
         dest: apache2/vhosts/alterconso.conf
     loop_control:
       loop_var: template
+  tags:
+  - alterconso

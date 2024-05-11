@@ -15,6 +15,6 @@ webapp_application_displayed_name: "Alterconso - Le Portail"
 webapp_application_email: alterconso@leportail.org
 webapp_database_user: docker
 webapp_database_password: docker
-webapp_database_fqdn: alterconso-mysql
+webapp_database_fqdn: mysql
 webapp_mailer_host: mailer
 webapp_mailer_port: 5000
