@@ -1,4 +1,0 @@
-
-project_path: "/home/{{ ansible_ssh_user }}/sources"
-repository_branch: master
-default_branch: master

@@ -6,6 +6,8 @@ global:
   checkNewVersion: false
   sendAnonymousUsage: false
 
+api: {}
+
 entryPoints:
   web:
     address: :80
@@ -16,19 +18,17 @@ entryPoints:
           scheme: https
   websecure:
     address: :443
+  traefik:
+    address: :8000
 
 certificatesResolvers:
-  myresolver:
+  letsencrypt:
     acme:
       email: guillaume.penad@gmail.com
       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       storage: /letsencrypt/acme.json
       httpChallenge:
         entryPoint: web
-
-api:
-  insecure: true
-  dashboard: true
 
 providers:
   docker:

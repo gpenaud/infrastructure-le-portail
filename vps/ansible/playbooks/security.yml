@@ -1,9 +1,0 @@
-
-- name: Security - Configure and secure the VPS
-  hosts: vps
-  gather_facts: false
-  tasks:
-
-    - name: Security - an encouragement for Thomas ! 
-      debug:
-        msg: "Have fun, bro !"

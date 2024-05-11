@@ -9,9 +9,17 @@ services:
   traefik:
     image: traefik:2.5.3
     ports:
-      - 8080:8080
       - 80:80
       - 443:443
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.dashboard.rule=Host(`new-traefik.leportail.org`)
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.tls=true
+      - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+      - traefik.http.routers.dashboard.middlewares=auth
+      - traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$VhnaGUEs$$Y5Y8kjd0s1l5ts0iGwnwL1
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "${APPLICATIONS_PATH}/traefik/traefik.yml:/traefik.yml"
