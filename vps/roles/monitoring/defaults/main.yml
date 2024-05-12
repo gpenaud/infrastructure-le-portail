@@ -1,0 +1,5 @@
+
+project_path: "/home/{{ ansible_user }}/monitoring"
+
+grafana_path: "{{ project_path }}/grafana"
+prometheus_path: "{{ project_path }}/prometheus"

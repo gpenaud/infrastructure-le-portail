@@ -1,0 +1,40 @@
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+  monitoring:
+    driver: bridge    
+    attachable: true
+    name: monitoring
+
+volumes:
+  prometheus_data:
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.external-url=/prometheus/'
+      - '--web.route-prefix=/prometheus/'
+    volumes:
+      - ${APPLICATIONS_PATH}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.prometheus.rule=(Host(`new-monitoring.leportail.org`) && PathPrefix(`/prometheus`))
+      - traefik.http.routers.prometheus.tls=true
+      - traefik.http.routers.prometheus.tls.certresolver=letsencrypt
+      - traefik.http.routers.prometheus.middlewares=auth
+      - traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$VhnaGUEs$$Y5Y8kjd0s1l5ts0iGwnwL1
+    networks:
+      - traefik
+      - monitoring
+

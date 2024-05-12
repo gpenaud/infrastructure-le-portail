@@ -1,0 +1,36 @@
+
+- name: "Main : create monitoring project directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ grafana_path }}"
+    - "{{ prometheus_path }}"
+  tags:
+    - monitoring
+
+- name: "Main : copy docker-compose and .env templates"
+  ansible.builtin.template:
+    src: templates/{{ template }}.j2
+    dest: "{{ project_path }}/{{ template }}"
+    mode: 0644
+  loop:
+    - .env
+    - docker-compose.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - monitoring
+
+- name: "Main : copy configration templates"
+  ansible.builtin.template:
+    src: templates/configuration/{{ template.filename }}.j2
+    dest: "{{ project_path }}/{{ template.directory }}/{{ template.filename }}"
+    mode: 0644
+  loop:
+    - directory: prometheus
+      filename: prometheus.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - monitoring
