@@ -3,11 +3,25 @@ vps:
   hosts:
     # production
     srv521992.hstgr.cloud:
+      ansible_user: gpenaud
+      traefik_external_host: traefik.leportail.org
+      prometheus_external_host: monitoring.leportail.org
+      prometheus_external_path: /prometheus
+      grafana_external_host: monitoring.leportail.org
+      alterconso_external_host: alterconso.leportail.org
+      wordpress_le_portail_external_host: www.leportail.org
 
 #
 # traefik subgroup
 #
 traefik:
+  children:
+    vps:
+
+#
+# monitoring subgroup (grafana, prometheus, and loki soon)
+#
+monitoring:
   children:
     vps:
 

@@ -1,6 +1,6 @@
 
 - hosts: monitoring
-  gather_facts: true
+  gather_facts: false
 
   roles:
     - name: monitoring

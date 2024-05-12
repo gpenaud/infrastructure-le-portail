@@ -1,6 +1,6 @@
 
 - hosts: le-portail
-  gather_facts: true
+  gather_facts: false
 
   pre_tasks:
     - name: "Traefik - install traefik reverse-proxy"
@@ -12,6 +12,16 @@
       ansible.builtin.include_role:
         name: alterconso
       tags: alterconso
+
+    - name: "Wordpress - install le-portail wordpress website"
+      ansible.builtin.include_role:
+        name: wordpress
+      vars:
+        site_name: le-portail
+        site_fqdn: "{{ wordpress_le_portail_external_host }}"
+        site_answer_to_domain: true
+      tags: 
+        - wordpress
 
   tasks:
     - debug:
