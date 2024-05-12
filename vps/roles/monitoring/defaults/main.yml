@@ -1,5 +1,12 @@
 
 project_path: "/home/{{ ansible_user }}/monitoring"
 
-grafana_path: "{{ project_path }}/grafana"
 prometheus_path: "{{ project_path }}/prometheus"
+prometheus_external_host: prometheus.localhost
+prometheus_external_path: /
+
+grafana_path: "{{ project_path }}/grafana"
+grafana_external_host: grafana.localhost
+grafana_external_path: /
+
+

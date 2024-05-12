@@ -4,7 +4,8 @@
     path: "{{ item }}"
     state: directory
   loop:
-    - "{{ grafana_path }}"
+    - "{{ grafana_path }}/dashboards"
+    - "{{ grafana_path }}/datasources"
     - "{{ prometheus_path }}"
   tags:
     - monitoring
@@ -22,15 +23,29 @@
   tags:
     - monitoring
 
-- name: "Main : copy configration templates"
+- name: "Main : copy configuration templates"
   ansible.builtin.template:
-    src: templates/configuration/{{ template.filename }}.j2
-    dest: "{{ project_path }}/{{ template.directory }}/{{ template.filename }}"
+    src: "templates/configuration/{{ template.source_dir }}/{{ template.file }}.j2"
+    dest: "{{ project_path }}/{{ template.remote_dir }}/{{ template.file }}"
     mode: 0644
   loop:
-    - directory: prometheus
-      filename: prometheus.yml
+    - source_dir: prometheus
+      remote_dir: prometheus
+      file: prometheus.yml
+    - source_dir: grafana
+      remote_dir: grafana
+      file: grafana.ini
+    - source_dir: grafana/datasources
+      remote_dir: grafana/datasources
+      file: datasources.yml
+    - source_dir: grafana/dashboards
+      remote_dir: grafana/dashboards
+      file: dashboard.yml
+    - source_dir: grafana/dashboards
+      remote_dir: grafana/dashboards
+      file: node.json
   loop_control:
     loop_var: template
   tags:
     - monitoring
+    - current

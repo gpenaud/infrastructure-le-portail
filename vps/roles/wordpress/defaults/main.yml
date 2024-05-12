@@ -1,2 +1,7 @@
 
 project_path: "/home/{{ ansible_user }}/wordpress/{{ site_name }}"
+
+wordpress_external_host: wordpress.localhost
+wordpress_external_path: /
+
+site_answer_to_domain: false

@@ -7,7 +7,7 @@ networks:
 
 volumes:
   wordpress:
-  mysql:
+  mariadb:
 
 services:
   # ------------------------------------------------------------------------------ #
@@ -19,30 +19,40 @@ services:
       - seccomp:unconfined
     restart: on-failure:10
     depends_on:
-      - mysql
+      - mariadb
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.wordpress_{{ site_name }}_by_host.rule=Host(`{{ site_fqdn }}`)
-      - traefik.http.routers.wordpress_{{ site_name }}_by_host.tls=true
-      - traefik.http.routers.wordpress_{{ site_name }}_by_host.tls.certresolver=letsencrypt
+      {% if site_answer_to_domain -%}
+      - traefik.http.routers.wordpress_{{ site_name }}.rule=(Host(`{{ site_fqdn | community.dns.get_registrable_domain }}`) || Host(`{{ site_fqdn }}`))
+      {% else -%}
+      - traefik.http.routers.wordpress_{{ site_name }}.rule=Host(`{{ site_fqdn }}`)
+      {% endif -%}
+      - traefik.http.routers.wordpress_{{ site_name }}.tls=true
+      - traefik.http.routers.wordpress_{{ site_name }}.tls.certresolver=letsencrypt
     environment:
+      WORDPRESS_DB_HOST: "mariadb:3306"
       WORDPRESS_DB_PASSWORD: docker
       WORDPRESS_DB_USER: docker
+      WORDPRESS_CONFIG_EXTRA: >
+        define('WP_HOME', 'https://www.leportail.org/');
+        define('WP_SITEURL', 'https://www.leportail.org/');
     volumes:
       - wordpress:/var/www/html
     networks:
       - traefik
       - {{ site_name }}
   
-  mysql:
-    image: mysql:5.7
+  mariadb:
+    image: mariadb:10.6.11
+    security_opt:
+      - seccomp:unconfined
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: docker
+      MARIADB_PASSWORD: docker
     volumes:
-      - mysql:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     networks:
       - {{ site_name }}

@@ -1,2 +1,4 @@
 
 project_path: "/home/{{ ansible_user }}/traefik"
+
+traefik_external_host: traefik.localhost

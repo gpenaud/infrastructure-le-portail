@@ -1,6 +1,9 @@
 
 project_path: "/home/{{ ansible_user }}/alterconso"
 
+alterconso_external_host: alterconso.localhost
+alterconso_external_path: /
+
 mailer_project_path: "{{ project_path }}/microservices/mailer"
 mailer_repository_branch: master
 mailer_default_branch: master
@@ -8,7 +11,7 @@ mailer_default_branch: master
 webapp_project_path: "{{ project_path }}/webapp"
 webapp_repository_branch: master
 webapp_default_branch: master
-webapp_application_fqdn: new-alterconso.leportail.org
+webapp_application_fqdn: "{{ alterconso_external_host }}"
 webapp_application_fqdn_aliases: []
 webapp_admin_email: guillaume.penaud@gmail.com
 webapp_application_displayed_name: "Alterconso - Le Portail"
@@ -18,3 +21,4 @@ webapp_database_password: docker
 webapp_database_fqdn: mysql
 webapp_mailer_host: mailer
 webapp_mailer_port: 5000
+

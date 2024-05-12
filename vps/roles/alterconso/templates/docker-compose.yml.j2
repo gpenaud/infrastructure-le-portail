@@ -19,9 +19,9 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.alterconso_by_host.rule=Host(`new-alterconso.leportail.org`)
-      - traefik.http.routers.alterconso_by_host.tls=true
-      - traefik.http.routers.alterconso_by_host.tls.certresolver=letsencrypt
+      - traefik.http.routers.alterconso.rule=Host(`{{ alterconso_external_host }}`)
+      - traefik.http.routers.alterconso.tls=true
+      - traefik.http.routers.alterconso.tls.certresolver=letsencrypt
     volumes:
       - ${APPLICATIONS_PATH}/webapp/configuration/apache2/vhosts/alterconso.conf:/etc/apache2/sites-available/alterconso.conf
       - ${APPLICATIONS_PATH}/webapp/configuration/apache2/vhosts/alterconso.conf:/etc/apache2/sites-enabled/alterconso.conf

@@ -10,8 +10,26 @@ networks:
 
 volumes:
   prometheus_data:
+  grafana_data:
 
 services:
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.grafana.rule=Host(`{{ grafana_external_host }}`)
+      - traefik.http.routers.grafana.tls=true
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+    volumes:
+      - ${APPLICATIONS_PATH}/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ${APPLICATIONS_PATH}/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ${APPLICATIONS_PATH}/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    networks:
+      - traefik
+      - monitoring
+
   prometheus:
     image: prom/prometheus:latest
     restart: unless-stopped
@@ -29,7 +47,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.prometheus.rule=(Host(`new-monitoring.leportail.org`) && PathPrefix(`/prometheus`))
+      - traefik.http.routers.prometheus.rule=(Host(`{{ prometheus_external_host }}`) && PathPrefix(`{{ prometheus_external_path }}`))
       - traefik.http.routers.prometheus.tls=true
       - traefik.http.routers.prometheus.tls.certresolver=letsencrypt
       - traefik.http.routers.prometheus.middlewares=auth
@@ -38,3 +56,17 @@ services:
       - traefik
       - monitoring
 
+  node-exporter:
+    image: prom/node-exporter:latest
+    restart: unless-stopped
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - monitoring
