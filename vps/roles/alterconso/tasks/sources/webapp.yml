@@ -26,6 +26,8 @@
         dest: app/config.xml
       - src: webapp/vhost.conf
         dest: apache2/vhosts/alterconso.conf
+      - src: webapp/mysql/my.cnf
+        dest: mysql/my.cnf
     loop_control:
       loop_var: template
   tags:

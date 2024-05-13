@@ -53,7 +53,7 @@ services:
       MYSQL_PASSWORD: docker
     volumes:
       - mysql:/var/lib/mysql
-      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/mysql/dumps/:/root/dumps
-      - ${APPLICATIONS_PATH}/alterconso/webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ${APPLICATIONS_PATH}/webapp/configuration/mysql/dumps/:/root/dumps
+      - ${APPLICATIONS_PATH}/webapp/configuration/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
       - alterconso
