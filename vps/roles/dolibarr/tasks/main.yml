@@ -1,0 +1,20 @@
+- name: "Main : create dolibarr project directory"
+  ansible.builtin.file:
+    path: "{{ project_path }}"
+    state: directory
+    recurse: yes
+  tags:
+    - dolibarr
+
+- name: "Main : copy docker-compose and .env templates"
+  ansible.builtin.template:
+    src: templates/{{ template }}.j2
+    dest: "{{ project_path }}/{{ template }}"
+    mode: 0644
+  loop:
+    - .env
+    - docker-compose.yml
+  loop_control:
+    loop_var: template
+  tags:
+    - dolibarr

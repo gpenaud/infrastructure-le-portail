@@ -1,0 +1,6 @@
+
+project_path: "/home/{{ ansible_user }}/dolibarr"
+
+dolibarr_external_host: dolibarr.localhost
+dolibarr_external_path: /
+

@@ -1,0 +1,62 @@
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+  dolibarr:
+
+volumes:
+  mariadb:
+
+services:
+  dolibarr:
+    image: tuxgasy/dolibarr
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.dolibarr.rule=Host(`{{ dolibarr_external_host }}`)
+    #   - traefik.http.routers.dolibarr.tls=true
+    #   - traefik.http.routers.dolibarr.tls.certresolver=letsencrypt
+    environment:
+      DOLI_DB_HOST: mariadb
+      DOLI_DB_USER: dolibarr
+      DOLI_DB_PASSWORD: DATABASE_PASSWORD
+      DOLI_DB_NAME: dolibarr
+      DOLI_URL_ROOT: 'http://{{ dolibarr_external_host }}'
+      PHP_INI_DATE_TIMEZONE: 'Europe/Paris'
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - traefik
+      - dolibarr
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      PUID: 1000
+      PGID: 1000
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Europe/Paris
+      MYSQL_DATABASE: dolibarr
+      MYSQL_USER: dolibarr
+      MYSQL_PASSWORD: docker
+    volumes:
+      - mariadb:/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      start_period: 45s
+      interval: 90s
+      timeout: 10s
+      retries: 3
+    networks:
+      - dolibarr
+       
+#   adminer:
+#     image: adminer
+#     restart: unless-stopped
+#     ports:
+#       - 4445:8080
+#     networks:
+#       - dolibarr

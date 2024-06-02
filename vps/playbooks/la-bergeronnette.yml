@@ -1,0 +1,24 @@
+- name: "Deploys \"la bergeronnette\" wordpress website"
+  hosts: la-bergeronnette
+  gather_facts: false
+
+  pre_tasks:
+    - name: "Traefik - install traefik reverse-proxy"
+      ansible.builtin.include_role:
+        name: traefik
+      tags: traefik
+
+    - name: "Wordpress - install la-bergeronnette wordpress website"
+      ansible.builtin.include_role:
+        name: wordpress
+      vars:
+        site_name: la-bergeronnette
+        site_fqdn: "{{ wordpress_la_bergeronnette_external_host }}"
+        site_answer_to_domain: true
+      tags:
+        - wordpress
+
+  tasks:
+    - name: "La-bergeronnette : specify the end of the playbook"
+      ansible.builtin.debug:
+        msg: "fin"
